@@ -1,5 +1,8 @@
+passtools-java.iml
+.idea
 *.class
-
+target
+.classpath
 # Package Files #
 *.jar
 *.war
