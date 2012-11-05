@@ -42,7 +42,7 @@ lastNameField.put("value", "Lie");
 
 
 
-You can then create Marie's pass on the server side
+You can then create Marie's pass 
 ```java
 Pass coupon = Pass.create(template.getId(), template.fieldsModel);
 ```
