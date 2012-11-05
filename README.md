@@ -61,6 +61,9 @@ Pass.downloadPass(coupon.id,"MarieCoupon.pkpass");//the pass is downloaded local
 
 ```
 
+
+Please note that we are currently deploying the com.passtools.* maven artifacts to the the central repositories. If they do not currently show on search results, please build the project with "mvn install" in the mean time. Thanks.
+
 ## Contributing
 
 1. Fork it
