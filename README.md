@@ -1,13 +1,13 @@
 passtools-java
 ==============
 
-Official Java SDK for the Passtools.com API
+Official Java SDK for the PassTools API
 
 
 ## Overview 
 
 Please refer to the [API Doc](https://github.com/tello/passtools-api) for the raw apis.
-The SDK make is easy to manage Apple's Passbook passes through the PassTools's Api.
+The SDK makes it easy to manage Apple Passbook passes through the PassTools API. This repo comes with the javadoc files, please point your browser to the index.html in the javadocs dir to read java docs.
 
 ## How to use the SDK
 
@@ -42,7 +42,7 @@ lastNameField.put("value", "Lie");
 
 
 
-You can then create Marie's pass on the server side
+You can then create Marie's pass 
 ```java
 Pass coupon = Pass.create(template.getId(), template.fieldsModel);
 ```
@@ -60,6 +60,17 @@ Pass.downloadPass(coupon.id,"MarieCoupon.pkpass");//the pass is downloaded local
 //you can now deliver the pass to Marie by email, sms or through a hosted URL.
 
 ```
+
+
+Please note that we are currently deploying the com.passtools.* maven artifacts to the the central repositories. If they do not currently show on search results, please build the project with "mvn install" in the mean time. Thanks.
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
 
 
 
