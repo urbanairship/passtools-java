@@ -6,8 +6,9 @@ Official Java SDK for the PassTools API
 
 ## Overview 
 
-Please refer to the [API Doc](https://github.com/tello/passtools-api) for the raw apis.
-The SDK makes it easy to manage Apple Passbook passes through the PassTools API. This repo comes with the javadoc files, please point your browser to the index.html in the javadocs dir to read java docs.
+* The SDK makes it easy to manage Apple Passbook passes through the PassTools API.
+* Please refer to the [API Doc](https://github.com/tello/passtools-api) for the raw apis.
+* Indexed documentation for the Java SDK is available at [http://tello.github.com/passtools-java/](http://tello.github.com/passtools-java/).
 
 ## How to use the SDK
 
