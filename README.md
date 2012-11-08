@@ -20,6 +20,9 @@ Let's say you wanted to create a personalized coupon for one of your customers. 
 
 From the java code, you first step is to set your API key to PassTools. You API key is supplied after you contact PassTools at help@passtools.com for early access to the API program.
 
+## Building/Loading the SDK
+
+Please build the code with _mvn clean install_ and load passtools-java-1.0.jar into your app from the target dir. (p.s: We are working on publishing the passtools-java library to public maven repositories and will update when done).
 
 ```java
 PassTools.apiKey = "yourKey"
