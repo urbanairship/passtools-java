@@ -6,8 +6,9 @@ Official Java SDK for the PassTools API
 
 ## Overview 
 
-Please refer to the [API Doc](https://github.com/tello/passtools-api) for the raw apis.
-The SDK makes it easy to manage Apple Passbook passes through the PassTools API. This repo comes with the javadoc files, please point your browser to the index.html in the javadocs dir to read java docs.
+* The SDK makes it easy to manage Apple Passbook passes through the PassTools API.
+* Please refer to the [API Doc](https://github.com/tello/passtools-api) for the raw apis.
+* Indexed documentation for the Java SDK is available at [http://tello.github.com/passtools-java/](http://tello.github.com/passtools-java/).
 
 ## How to use the SDK
 
@@ -18,7 +19,7 @@ Let's say you wanted to create a personalized coupon for one of your customers. 
 
 
 From the java code, you first step is to set your API key to PassTools. You API key is supplied after you contact PassTools at help@passtools.com for early access to the API program.
-
+Please build the code with _mvn clean install_ and load passtools-java-1.0.jar into your app from the target dir. (p.s: We are working on publishing the passtools-java library to public maven repositories and will update when done).
 
 ```java
 PassTools.apiKey = "yourKey"
