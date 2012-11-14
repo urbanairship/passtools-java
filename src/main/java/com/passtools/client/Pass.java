@@ -177,6 +177,30 @@ public class Pass extends PassToolsClient {
 
 
 
+    public static JSONObject viewPassbookJSONPass(Long passId){
+        try {
+
+            checkNotNullPassId(passId);
+
+            String url = PassTools.API_BASE + "/pass/" + passId.toString() +"/viewJSONPass";
+
+            PassToolsResponse response = get(url);
+
+            return response.getBodyAsJSONObject();
+
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
     public static void downloadPass(Long passId, File to) {
         try {
 
