@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,13 @@ public class Pass extends PassToolsClient {
     public Long passId;
     public Long templateId;
     public String url;
+
+    private static void checkNotNullPassId(Long passId) {
+        if (passId == null) {
+            throw new InvalidParameterException("please input a valid Pass!");
+        }
+
+    }
 
 
     /* Creates a pass with the Map fiedsModel set. The Map fiedsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder */
@@ -90,12 +98,32 @@ public class Pass extends PassToolsClient {
     }
 
 
+    public static JSONObject push(Long passId) {
+        try {
+
+            checkNotNullPassId(passId);
+
+            String url = PassTools.API_BASE + "/pass/" + passId.toString() + "/push";
+
+            PassToolsResponse response = put(url, Collections.emptyMap());
+            return response.getBodyAsJSONObject();
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+
     public static Pass get(Long passId) {
         try {
 
-            if (passId == null) {
-                throw new InvalidParameterException("please input a valid Pass!");
-            }
+            checkNotNullPassId(passId);
 
             String url = PassTools.API_BASE + "/pass/" + passId.toString();
 
@@ -122,6 +150,31 @@ public class Pass extends PassToolsClient {
         }
 
     }
+
+
+
+
+    public static void delete(Long passId){
+
+        try {
+
+            checkNotNullPassId(passId);
+
+            String url = PassTools.API_BASE + "/pass/" + passId.toString();
+
+            PassToolsResponse response = delete(url);
+
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 
 
     public static void downloadPass(Long passId, File to) {

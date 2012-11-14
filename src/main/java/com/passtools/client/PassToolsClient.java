@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -51,7 +52,6 @@ public class PassToolsClient {
     }
 
 
-
     protected static void apiKeyCheck() throws AuthenticationException {
         if ((PassTools.apiKey == null || PassTools.apiKey.length() == 0) && (PassTools.apiKey == null || PassTools.apiKey.length() == 0)) {
             throw new AuthenticationException("No API secret key provided.");
@@ -59,7 +59,7 @@ public class PassToolsClient {
     }
 
     protected static String addApiKey(String url) throws Exception {
-        return url +"?api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
+        return url + "?api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
     }
 
 
@@ -73,34 +73,34 @@ public class PassToolsClient {
     }
 
 
-   protected static HttpClient getHttpClient() throws Exception {
-       HttpClient base = new DefaultHttpClient();
-       SSLContext ctx = SSLContext.getInstance("TLS");
-       X509TrustManager tm = new X509TrustManager() {
+    protected static HttpClient getHttpClient() throws Exception {
+        HttpClient base = new DefaultHttpClient();
+        SSLContext ctx = SSLContext.getInstance("TLS");
+        X509TrustManager tm = new X509TrustManager() {
 
-           public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-           }
+            public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+            }
 
-           public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-           }
+            public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+            }
 
-           public X509Certificate[] getAcceptedIssuers() {
-               return null;
-           }
-       };
-       ctx.init(null, new TrustManager[]{tm}, null);
-       SSLSocketFactory ssf = new SSLSocketFactory(ctx);
-       ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-       ClientConnectionManager ccm = base.getConnectionManager();
-       SchemeRegistry sr = ccm.getSchemeRegistry();
-       sr.register(new Scheme("https", ssf, 443));
-
-
-       HttpClient httpClient = new DefaultHttpClient(ccm,base.getParams());
-       return httpClient;
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        ctx.init(null, new TrustManager[]{tm}, null);
+        SSLSocketFactory ssf = new SSLSocketFactory(ctx);
+        ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        ClientConnectionManager ccm = base.getConnectionManager();
+        SchemeRegistry sr = ccm.getSchemeRegistry();
+        sr.register(new Scheme("https", ssf, 443));
 
 
-   }
+        HttpClient httpClient = new DefaultHttpClient(ccm, base.getParams());
+        return httpClient;
+
+
+    }
 
 
     protected static PassToolsResponse _rawGet(String url) throws Exception {
@@ -118,7 +118,6 @@ public class PassToolsClient {
     }
 
 
-
     protected static PassToolsResponse get(String url) throws Exception {
 
         apiKeyCheck();
@@ -133,8 +132,6 @@ public class PassToolsClient {
         return new PassToolsResponse(response);
 
     }
-
-
 
 
     protected static PassToolsResponse post(String url, Map formFields) throws Exception {
@@ -165,7 +162,6 @@ public class PassToolsClient {
     }
 
 
-
     protected static PassToolsResponse put(String url, Map formFields) throws Exception {
 
         apiKeyCheck();
@@ -177,8 +173,12 @@ public class PassToolsClient {
         put.setHeader("Accept", "application/json");
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
-        JSONObject jsonObj = (JSONObject) formFields.get("json");
-        postParams.add(new BasicNameValuePair("json", jsonObj.toJSONString()));
+
+        if (!formFields.isEmpty()) {
+            JSONObject jsonObj = (JSONObject) formFields.get("json");
+            postParams.add(new BasicNameValuePair("json", jsonObj.toJSONString()));
+        }
+
         postParams.add(new BasicNameValuePair("api_key", URLEncoder.encode(PassTools.apiKey, "UTF-8")));
 
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postParams);
@@ -197,9 +197,26 @@ public class PassToolsClient {
 
 
 
-    protected static File downloadPass(String url) {
-        return null;
+
+    protected static PassToolsResponse delete(String url) throws Exception {
+        apiKeyCheck();
+
+        HttpClient httpclient = getHttpClient();
+        HttpDelete delete = new HttpDelete(addApiKey(url));
+
+
+        HttpResponse response = httpclient.execute(delete);
+
+        handleError(response);
+
+        return new PassToolsResponse(response);
+
+
     }
+
+
+
+
 
 
 }

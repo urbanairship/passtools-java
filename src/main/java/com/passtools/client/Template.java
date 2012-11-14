@@ -13,7 +13,7 @@ public class Template extends PassToolsClient {
     public Map<String,JSONObject> fieldsModel; /* field key + field values = {value, label, changeMessage..} */
 
 
-    private static void validateTemplateId(Long templateId) {
+    private static void checkNotNull(Long templateId) {
         if (templateId == null) {
             throw new InvalidParameterException("please pass a valid template Id in!");
         }
@@ -33,7 +33,7 @@ public class Template extends PassToolsClient {
     public static Template getTemplate(Long templateId) {
         try {
 
-            validateTemplateId(templateId);
+            checkNotNull(templateId);
 
             String url = PassTools.API_BASE + "/template/" +templateId.toString();
             PassToolsResponse response = get(url);
@@ -57,6 +57,27 @@ public class Template extends PassToolsClient {
         }
     }
 
+
+
+    public static void delete(Long templateId){
+
+        try {
+
+            checkNotNull(templateId);
+
+            String url = PassTools.API_BASE + "/template/" + templateId.toString();
+
+            PassToolsResponse response = delete(url);
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
 
 
