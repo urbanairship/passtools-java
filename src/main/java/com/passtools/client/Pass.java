@@ -98,24 +98,6 @@ public class Pass extends PassToolsClient {
     }
 
 
-    public static JSONObject push(Long passId) {
-        try {
-
-            checkNotNullPassId(passId);
-
-            String url = PassTools.API_BASE + "/pass/" + passId.toString() + "/push";
-
-            PassToolsResponse response = put(url, Collections.emptyMap());
-            return response.getBodyAsJSONObject();
-
-
-        } catch (RuntimeException rte) {
-            throw rte;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
 
 
@@ -154,50 +136,7 @@ public class Pass extends PassToolsClient {
 
 
 
-    public static void delete(Long passId){
 
-        try {
-
-            checkNotNullPassId(passId);
-
-            String url = PassTools.API_BASE + "/pass/" + passId.toString();
-
-            PassToolsResponse response = delete(url);
-
-
-
-        } catch (RuntimeException rte) {
-            throw rte;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
-
-
-    public static JSONObject viewPassbookJSONPass(Long passId){
-        try {
-
-            checkNotNullPassId(passId);
-
-            String url = PassTools.API_BASE + "/pass/" + passId.toString() +"/viewJSONPass";
-
-            PassToolsResponse response = get(url);
-
-            return response.getBodyAsJSONObject();
-
-
-
-        } catch (RuntimeException rte) {
-            throw rte;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
 
 
 
