@@ -59,6 +59,25 @@ public class Template extends PassToolsClient {
 
 
 
+    public static void delete(Long templateId){
+
+        try {
+
+            checkNotNull(templateId);
+
+            String url = PassTools.API_BASE + "/template/" + templateId.toString();
+
+            PassToolsResponse response = delete(url);
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
 
 
