@@ -18,6 +18,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
 import javax.net.ssl.SSLContext;
@@ -145,8 +147,15 @@ public class PassToolsClient {
         post.setHeader("Accept", "application/json");
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
-        JSONObject jsonObj = (JSONObject) formFields.get("json");
-        postParams.add(new BasicNameValuePair("json", jsonObj.toJSONString()));
+
+        Object o = (Object) formFields.get("json");
+
+        if (o instanceof JSONAware) {
+            postParams.add(new BasicNameValuePair("json", ((JSONAware)o).toJSONString()));
+        } else {
+            throw new IllegalArgumentException("please pass a JSONObject or JSONArray value into the form fields");
+        }
+
         postParams.add(new BasicNameValuePair("api_key", URLEncoder.encode(PassTools.apiKey, "UTF-8")));
 
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postParams);
@@ -196,8 +205,6 @@ public class PassToolsClient {
     }
 
 
-
-
     protected static PassToolsResponse delete(String url) throws Exception {
         apiKeyCheck();
 
@@ -213,10 +220,6 @@ public class PassToolsClient {
 
 
     }
-
-
-
-
 
 
 }

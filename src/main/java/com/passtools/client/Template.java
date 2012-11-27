@@ -1,10 +1,12 @@
 package com.passtools.client;
 
 
+import com.google.gson.Gson;
 import com.passtools.client.exception.InvalidParameterException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +105,42 @@ public class Template extends PassToolsClient {
 
     }
 
+
+
+
+
+    public static JSONArray addLocations(Long templateId,List<Location> locations) {
+        try {
+
+            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/locations";
+
+            JSONArray array = new JSONArray();
+            Gson gson = new Gson();
+
+
+            for (Location location:locations){
+                array.add(gson.toJson(location));
+            }
+
+            Map formFields = new HashMap<String, JSONArray>();
+            formFields.put("json", array);
+
+
+            PassToolsResponse response = post(url,formFields);
+
+            JSONObject jsonResponse = response.getBodyAsJSONObject();
+            JSONArray locationsResponse = (JSONArray)jsonResponse.get("locations");
+
+            return locationsResponse;
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 
 
