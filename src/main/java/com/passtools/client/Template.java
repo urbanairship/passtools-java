@@ -109,6 +109,7 @@ public class Template extends PassToolsClient {
 
 
 
+    /* adds locations to the template */
     public static JSONArray addLocations(Long templateId,List<Location> locations) {
         try {
 
@@ -125,14 +126,26 @@ public class Template extends PassToolsClient {
             Map formFields = new HashMap<String, JSONArray>();
             formFields.put("json", array);
 
-
             PassToolsResponse response = post(url,formFields);
 
-            JSONObject jsonResponse = response.getBodyAsJSONObject();
-            JSONArray locationsResponse = (JSONArray)jsonResponse.get("locations");
+            return response.getBodyAsJSONArray();
 
-            return locationsResponse;
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+    }
+
+
+
+    /* deletes a location from the template */
+    public static void deleteLocation(Long templateId, Long locationId){
+        try {
+
+            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/location/" + locationId.toString();
+            delete(url);
 
         } catch (RuntimeException rte) {
             throw rte;
