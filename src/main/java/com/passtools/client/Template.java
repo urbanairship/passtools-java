@@ -2,6 +2,7 @@ package com.passtools.client;
 
 
 import com.google.gson.Gson;
+import com.passtools.client.data.LocationInfo;
 import com.passtools.client.exception.InvalidParameterException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -109,18 +110,18 @@ public class Template extends PassToolsClient {
 
 
 
-    /* adds locations to the template */
-    public static JSONArray addLocations(Long templateId,List<Location> locations) {
+    /* adds locationInfos to the template */
+    public static JSONArray addLocations(Long templateId,List<LocationInfo> locationInfos) {
         try {
 
-            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/locations";
+            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/locationInfos";
 
             JSONArray array = new JSONArray();
             Gson gson = new Gson();
 
 
-            for (Location location:locations){
-                array.add(gson.toJson(location));
+            for (LocationInfo locationInfo : locationInfos){
+                array.add(gson.toJson(locationInfo));
             }
 
             Map formFields = new HashMap<String, JSONArray>();
