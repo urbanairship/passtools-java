@@ -1,7 +1,10 @@
 package com.passtools.client;
 
 
+import com.google.gson.Gson;
+import com.passtools.client.data.LocationInfo;
 import com.passtools.client.exception.InvalidParameterException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
@@ -11,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Pass extends PassToolsClient {
@@ -98,10 +102,6 @@ public class Pass extends PassToolsClient {
     }
 
 
-
-
-
-
     public static Pass get(Long passId) {
         try {
 
@@ -132,12 +132,6 @@ public class Pass extends PassToolsClient {
         }
 
     }
-
-
-
-
-
-
 
 
     public static void downloadPass(Long passId, File to) {
@@ -237,6 +231,52 @@ public class Pass extends PassToolsClient {
         }
 
     }
+
+
+
+    public static JSONArray addLocations(Long passId,List<LocationInfo> locationInfos) {
+        try {
+
+            String url = PassTools.API_BASE + "/pass/" +passId.toString() +"/locations";
+
+            JSONArray array = new JSONArray();
+            Gson gson = new Gson();
+
+
+            for (LocationInfo locationInfo : locationInfos){
+                array.add(gson.toJson(locationInfo));
+            }
+
+            Map formFields = new HashMap<String, JSONArray>();
+            formFields.put("json", array);
+
+            PassToolsResponse response = post(url,formFields);
+
+            return response.getBodyAsJSONArray();
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /* deletes a location from the template */
+    public static void deleteLocation(Long passId, Long passLocationId){
+        try {
+
+            String url = PassTools.API_BASE + "/pass/" +passId.toString() +"/location/" + passLocationId.toString();
+            delete(url);
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
 
 }

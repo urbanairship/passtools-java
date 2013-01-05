@@ -110,51 +110,6 @@ public class Template extends PassToolsClient {
 
 
 
-    /* adds locationInfos to the template */
-    public static JSONArray addLocations(Long templateId,List<LocationInfo> locationInfos) {
-        try {
-
-            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/locationInfos";
-
-            JSONArray array = new JSONArray();
-            Gson gson = new Gson();
-
-
-            for (LocationInfo locationInfo : locationInfos){
-                array.add(gson.toJson(locationInfo));
-            }
-
-            Map formFields = new HashMap<String, JSONArray>();
-            formFields.put("json", array);
-
-            PassToolsResponse response = post(url,formFields);
-
-            return response.getBodyAsJSONArray();
-
-        } catch (RuntimeException rte) {
-            throw rte;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-
-
-    /* deletes a location from the template */
-    public static void deleteLocation(Long templateId, Long locationId){
-        try {
-
-            String url = PassTools.API_BASE + "/template/" +templateId.toString() +"/location/" + locationId.toString();
-            delete(url);
-
-        } catch (RuntimeException rte) {
-            throw rte;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
 
 

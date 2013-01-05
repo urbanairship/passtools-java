@@ -7,7 +7,7 @@
     <groupId>com.passtools.client</groupId>
     <artifactId>passtools-java</artifactId>
     <packaging>jar</packaging>
-    <name>passtools java client</name>
+    <name>passtools java sdk</name>
     <version>1.02</version>
 
 
