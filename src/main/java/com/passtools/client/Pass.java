@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
@@ -135,6 +136,12 @@ public class Pass extends PassToolsClient {
 
 
     public static void downloadPass(Long passId, File to) {
+
+
+        if (to == null || !to.exists()){
+            throw new IllegalArgumentException("please pass a valid file in!");
+        }
+
         try {
 
             String url = PassTools.API_BASE + "/pass/" + passId.toString() + "/download";
