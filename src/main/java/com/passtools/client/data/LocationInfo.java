@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 
 public class LocationInfo {
     public Long id;
-    public Float altitude,longitude,latitude;
+    public Double longitude,latitude;
     public String relevantText;
     public String streetAddress1,streetAddress2;
     public String city;
@@ -31,9 +31,7 @@ public class LocationInfo {
         JSONObject json = new JSONObject();
 
 
-        if (altitude != null) {
-            json.put("altitude", altitude);
-        }
+
 
         if (longitude != null) {
             json.put("longitude", longitude);
@@ -81,16 +79,14 @@ public class LocationInfo {
         }
 
 
-        if (json.containsKey("altitude")) {
-            loc.altitude = new Float((Double) json.get("altitude"));
-        }
+
 
         if (json.containsKey("longitude")) {
-            loc.longitude = new Float((Double) json.get("longitude"));
+            loc.longitude = (Double) json.get("longitude");
         }
 
         if (json.containsKey("latitude")) {
-            loc.latitude = new Float((Double) json.get("latitude"));
+            loc.latitude = (Double) json.get("latitude");
         }
 
         if (json.containsKey("relevantText")) {

@@ -2,6 +2,7 @@ package com.passtools.client;
 
 
 import com.passtools.client.exception.*;
+import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -136,7 +137,29 @@ public class PassToolsClient {
     }
 
 
-    protected static PassToolsResponse post(String url, Map formFields) throws Exception {
+
+    protected static Map defaultHeaders(){
+        Map headers = new HashMap<String,String>();
+        headers.put("Accept","application/json");
+        return headers;
+    }
+
+    private static void setHeaders(HttpMessage message, Map headers) {
+
+        if (headers != null || headers.size() > 0) {
+            Iterator it = headers.keySet().iterator();
+            while (it.hasNext()){
+                String key = (String)it.next();
+                String value = (String)headers.get(key);
+                message.setHeader(key,value);
+
+            }
+        }
+
+    }
+
+
+    protected static PassToolsResponse post(String url, Map formFields, Map headers) throws Exception {
 
         apiKeyCheck();
 
@@ -144,14 +167,15 @@ public class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpPost post = new HttpPost(url);
 
-        post.setHeader("Accept", "application/json");
+        setHeaders(post,headers);
+
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
         Object o = (Object) formFields.get("json");
 
         if (o instanceof JSONAware) {
-            postParams.add(new BasicNameValuePair("json", ((JSONAware)o).toJSONString()));
+            postParams.add(new BasicNameValuePair("json", ((JSONAware) o).toJSONString()));
         } else {
             throw new IllegalArgumentException("please pass a JSONObject or JSONArray value into the form fields");
         }
@@ -171,7 +195,12 @@ public class PassToolsClient {
     }
 
 
-    protected static PassToolsResponse put(String url, Map formFields) throws Exception {
+    protected static PassToolsResponse post(String url, Map formFields) throws Exception {
+        return post(url,formFields,defaultHeaders());
+    }
+
+
+    protected static PassToolsResponse put(String url, Map formFields, Map headers) throws Exception {
 
         apiKeyCheck();
 
@@ -179,7 +208,8 @@ public class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpPut put = new HttpPut(url);
 
-        put.setHeader("Accept", "application/json");
+        setHeaders(put,headers);
+
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
@@ -205,11 +235,22 @@ public class PassToolsClient {
     }
 
 
+    protected static PassToolsResponse put(String url, Map formFields) throws Exception {
+        return put(url,formFields,defaultHeaders());
+    }
+
+
     protected static PassToolsResponse delete(String url) throws Exception {
+        return delete(url,Collections.emptyMap());
+    }
+
+    protected static PassToolsResponse delete(String url, Map headers) throws Exception {
         apiKeyCheck();
 
         HttpClient httpclient = getHttpClient();
         HttpDelete delete = new HttpDelete(addApiKey(url));
+
+        setHeaders(delete,headers);
 
 
         HttpResponse response = httpclient.execute(delete);
