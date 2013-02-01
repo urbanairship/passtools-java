@@ -1,10 +1,13 @@
 package com.passtools.client;
 
 
+import com.google.gson.Gson;
+import com.passtools.client.data.LocationInfo;
 import com.passtools.client.exception.InvalidParameterException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +105,10 @@ public class Template extends PassToolsClient {
 
 
     }
+
+
+
+
 
 
 
