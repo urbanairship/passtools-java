@@ -75,6 +75,19 @@ public class PassToolsClient {
         }
     }
 
+    protected static void setJsonFormField(List<NameValuePair> postParams,Map formFields) throws Exception {
+
+        Object o = (Object) formFields.get("json");
+
+        if (o instanceof JSONAware) {
+            postParams.add(new BasicNameValuePair("json", ((JSONAware) o).toJSONString()));
+        } else {
+            throw new IllegalArgumentException("please pass a JSONObject or JSONArray value into the form fields");
+        }
+
+    }
+
+
 
     protected static HttpClient getHttpClient() throws Exception {
         HttpClient base = new DefaultHttpClient();
@@ -159,6 +172,10 @@ public class PassToolsClient {
     }
 
 
+
+
+
+
     protected static PassToolsResponse post(String url, Map formFields, Map headers) throws Exception {
 
         apiKeyCheck();
@@ -172,14 +189,7 @@ public class PassToolsClient {
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
-        Object o = (Object) formFields.get("json");
-
-        if (o instanceof JSONAware) {
-            postParams.add(new BasicNameValuePair("json", ((JSONAware) o).toJSONString()));
-        } else {
-            throw new IllegalArgumentException("please pass a JSONObject or JSONArray value into the form fields");
-        }
-
+        setJsonFormField(postParams,formFields);
         postParams.add(new BasicNameValuePair("api_key", URLEncoder.encode(PassTools.apiKey, "UTF-8")));
 
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postParams);
@@ -213,11 +223,7 @@ public class PassToolsClient {
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
-        if (!formFields.isEmpty()) {
-            JSONObject jsonObj = (JSONObject) formFields.get("json");
-            postParams.add(new BasicNameValuePair("json", jsonObj.toJSONString()));
-        }
-
+        setJsonFormField(postParams,formFields);
         postParams.add(new BasicNameValuePair("api_key", URLEncoder.encode(PassTools.apiKey, "UTF-8")));
 
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postParams);
