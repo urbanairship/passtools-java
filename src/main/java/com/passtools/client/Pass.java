@@ -4,6 +4,7 @@ package com.passtools.client;
 import com.google.gson.Gson;
 import com.passtools.client.data.LocationInfo;
 import com.passtools.client.exception.InvalidParameterException;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,12 +12,9 @@ import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.util.*;
 
 public class Pass extends PassToolsClient {
     public Map fields; // (field key, JSONObject )
@@ -241,6 +239,31 @@ public class Pass extends PassToolsClient {
 
 
 
+    //we will need to build a pass builder with and/or conditions
+    public static JSONObject pushToTags(String tag, Map fields) {
+        try {
+
+            String url = PassTools.API_BASE + "/pass/tags";
+
+            List<BasicNameValuePair> queryParams = new ArrayList<BasicNameValuePair>();
+            BasicNameValuePair param = new BasicNameValuePair("tags", URLEncoder.encode(tag,"UTF-8"));
+            queryParams.add(param);
+
+            PassToolsResponse response = putWithParams(url, fields, queryParams);
+            return response.getBodyAsJSONObject();
+
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+
     public static JSONArray addLocations(Long passId,List<LocationInfo> locationInfos) {
         try {
 
@@ -275,6 +298,34 @@ public class Pass extends PassToolsClient {
 
             String url = PassTools.API_BASE + "/pass/" +passId.toString() +"/location/" + passLocationId.toString();
             delete(url);
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+    public static void addTags(Long passId,List<String> tags) throws Exception {
+        try {
+
+            String url = PassTools.API_BASE  +"/pass/" +passId.toString() +"/tags";
+            Map formFields = new HashMap<String, JSONArray>();
+            JSONArray tagsArray = new JSONArray();
+
+            for (String tag:tags){
+                JSONObject jsonTag = new JSONObject();
+                jsonTag.put("tag",tag);
+                tagsArray.add(jsonTag);
+            }
+
+            formFields.put("json",tagsArray);
+
+            PassToolsResponse response = put(url, formFields);
+
 
         } catch (RuntimeException rte) {
             throw rte;
