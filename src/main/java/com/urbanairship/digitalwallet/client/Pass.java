@@ -1,9 +1,9 @@
-package com.passtools.client;
+package com.urbanairship.digitalwallet.client;
 
 
 import com.google.gson.Gson;
-import com.passtools.client.data.LocationInfo;
-import com.passtools.client.exception.InvalidParameterException;
+import com.urbanairship.digitalwallet.client.data.LocationInfo;
+import com.urbanairship.digitalwallet.client.exception.InvalidParameterException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,7 +11,6 @@ import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
@@ -283,7 +282,4 @@ public class Pass extends PassToolsClient {
         }
 
     }
-
-
-
 }

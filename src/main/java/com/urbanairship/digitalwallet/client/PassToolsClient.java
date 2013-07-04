@@ -1,7 +1,7 @@
-package com.passtools.client;
+package com.urbanairship.digitalwallet.client;
 
 
-import com.passtools.client.exception.*;
+import com.urbanairship.digitalwallet.client.exception.*;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,14 +19,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.security.cert.CertificateException;
@@ -53,6 +51,8 @@ public class PassToolsClient {
         }
 
     }
+
+
 
 
     protected static void apiKeyCheck() throws AuthenticationException {
@@ -99,16 +99,11 @@ public class PassToolsClient {
         sr.register(new Scheme("https", ssf, 443));
 
 
-        HttpClient httpClient = new DefaultHttpClient(ccm, base.getParams());
-        return httpClient;
-
-
+        return new DefaultHttpClient(ccm, base.getParams());
     }
 
 
     protected static PassToolsResponse _rawGet(String url) throws Exception {
-
-
         HttpClient httpclient = getHttpClient();
         HttpGet get = new HttpGet(url);
 
@@ -117,7 +112,6 @@ public class PassToolsClient {
         handleError(response);
 
         return new PassToolsResponse(response);
-
     }
 
 
@@ -146,12 +140,11 @@ public class PassToolsClient {
 
     private static void setHeaders(HttpMessage message, Map headers) {
 
-        if (headers != null || headers.size() > 0) {
-            Iterator it = headers.keySet().iterator();
-            while (it.hasNext()){
-                String key = (String)it.next();
-                String value = (String)headers.get(key);
-                message.setHeader(key,value);
+        if (headers != null && headers.size() > 0) {
+            for (Object o : headers.keySet()) {
+                String key = (String) o;
+                String value = (String) headers.get(key);
+                message.setHeader(key, value);
 
             }
         }
@@ -172,7 +165,7 @@ public class PassToolsClient {
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
-        Object o = (Object) formFields.get("json");
+        Object o = formFields.get("json");
 
         if (o instanceof JSONAware) {
             postParams.add(new BasicNameValuePair("json", ((JSONAware) o).toJSONString()));
@@ -191,7 +184,6 @@ public class PassToolsClient {
         handleError(response);
 
         return new PassToolsResponse(response);
-
     }
 
 
@@ -236,7 +228,7 @@ public class PassToolsClient {
 
 
     protected static PassToolsResponse put(String url, Map formFields) throws Exception {
-        return put(url,formFields,defaultHeaders());
+        return put(url, formFields, defaultHeaders());
     }
 
 

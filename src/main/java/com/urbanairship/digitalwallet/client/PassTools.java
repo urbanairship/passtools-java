@@ -1,4 +1,4 @@
-package com.passtools.client;
+package com.urbanairship.digitalwallet.client;
 
 
 public abstract class PassTools {
