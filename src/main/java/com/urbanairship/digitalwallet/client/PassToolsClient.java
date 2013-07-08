@@ -33,7 +33,6 @@ import java.util.*;
 
 public class PassToolsClient {
 
-
     private static void handleAPIError(String responseBody, int responseCode) throws PassToolsException {
         switch (responseCode) {
             case 400:
@@ -49,11 +48,7 @@ public class PassToolsClient {
             default:
                 throw new ApiException(responseBody);
         }
-
     }
-
-
-
 
     protected static void apiKeyCheck() throws AuthenticationException {
         if ((PassTools.apiKey == null || PassTools.apiKey.length() == 0) && (PassTools.apiKey == null || PassTools.apiKey.length() == 0)) {
@@ -65,16 +60,13 @@ public class PassToolsClient {
         return url + "?api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
     }
 
-
     protected static void handleError(HttpResponse response) throws IOException, PassToolsException {
         int responseCode = response.getStatusLine().getStatusCode();
         if (responseCode < 200 || responseCode >= 300) {
             String responseStr = EntityUtils.toString(response.getEntity());
             handleAPIError(responseStr, responseCode);
-
         }
     }
-
 
     protected static HttpClient getHttpClient() throws Exception {
         HttpClient base = new DefaultHttpClient();
@@ -101,7 +93,6 @@ public class PassToolsClient {
 
         return new DefaultHttpClient(ccm, base.getParams());
     }
-
 
     protected static PassToolsResponse _rawGet(String url) throws Exception {
         HttpClient httpclient = getHttpClient();
@@ -133,8 +124,9 @@ public class PassToolsClient {
 
 
     protected static Map defaultHeaders(){
-        Map headers = new HashMap<String,String>();
+        Map<String, String> headers = new HashMap<String,String>();
         headers.put("Accept","application/json");
+        headers.put("Api-Revision", PassTools.VERSION);
         return headers;
     }
 
@@ -153,15 +145,12 @@ public class PassToolsClient {
 
 
     protected static PassToolsResponse post(String url, Map formFields, Map headers) throws Exception {
-
         apiKeyCheck();
-
 
         HttpClient httpclient = getHttpClient();
         HttpPost post = new HttpPost(url);
 
         setHeaders(post,headers);
-
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
@@ -193,15 +182,12 @@ public class PassToolsClient {
 
 
     protected static PassToolsResponse put(String url, Map formFields, Map headers) throws Exception {
-
         apiKeyCheck();
-
 
         HttpClient httpclient = getHttpClient();
         HttpPut put = new HttpPut(url);
 
         setHeaders(put,headers);
-
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
@@ -216,21 +202,16 @@ public class PassToolsClient {
         entity.setContentEncoding(HTTP.UTF_8);
         put.setEntity(entity);
 
-
         HttpResponse response = httpclient.execute(put);
 
         handleError(response);
 
         return new PassToolsResponse(response);
-
-
     }
-
 
     protected static PassToolsResponse put(String url, Map formFields) throws Exception {
         return put(url, formFields, defaultHeaders());
     }
-
 
     protected static PassToolsResponse delete(String url) throws Exception {
         return delete(url,Collections.emptyMap());

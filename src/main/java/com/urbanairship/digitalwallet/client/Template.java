@@ -5,12 +5,13 @@ import com.urbanairship.digitalwallet.client.exception.InvalidParameterException
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Template extends PassToolsClient {
 
-    public JSONObject templateHeader; /* keys are id,name,description... */
+    public Map<String,JSONObject> templateHeader; /* keys are id,name,description... */
     public Map<String,JSONObject> fieldsModel; /* field key + field values = {value, label, changeMessage..} */
 
     /**
@@ -22,7 +23,7 @@ public class Template extends PassToolsClient {
      * DELETE      /{templateId}                   Delete a template based on its template id
      * DELETE      /id/{externalId}                Delete a template based on its external id
 
-     POST        /                               Create a new template
+     * POST        /                               Create a new template
      POST        /id/{externalId}                Create a new template and assign it an external id
      POST        /{projectId}                    Create a template and assign it to a project
      POST        /{projectId}/id/{externalId}    Create a template and assign it to a project, and give the template an external id
@@ -45,11 +46,54 @@ public class Template extends PassToolsClient {
 
     public Long getId(){
         if (templateHeader!=null){
-            return new Long((String)templateHeader.get("id"));
+            JSONObject o = templateHeader.get("id");
+            return (Long)o.get("value");
         } else {
             throw new RuntimeException("please set your templateHeader id first");
         }
+    }
 
+    public static Long createTemplate(String name, String description, String templateType, Map<String, Object> headers, Map<String, Object> fields) {
+        try {
+            if (fields == null) {
+                throw new InvalidParameterException("please pass a map of fields in!");
+            }
+
+            if (headers == null) {
+                throw new InvalidParameterException("please pass in a map of header fields");
+            }
+
+            String url = PassTools.API_BASE + "/template/";
+            JSONObject jsonFields = new JSONObject(fields);
+            JSONObject jsonHeaders = new JSONObject(headers);
+
+            Map<String, Object> formFields = new HashMap<String, Object>();
+            Map<String, Object> json = new HashMap<String, Object>();
+
+            json.put("fields", jsonFields);
+            json.put("headers", jsonHeaders);
+            json.put("name", name);
+            json.put("description", description);
+            json.put("type", templateType);
+            formFields.put("json", new JSONObject(json));
+
+            PassToolsResponse response = post(url, formFields);
+            JSONObject jsonObj = response.getBodyAsJSONObject();
+            String id = (String)jsonObj.get("templateId");
+            if (id != null) {
+                try {
+                    return Long.valueOf(id);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        } catch (RuntimeException rte) {
+            throw rte;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     public static Template getTemplate(Long templateId) {
@@ -128,7 +172,6 @@ public class Template extends PassToolsClient {
             String url = PassTools.API_BASE + "/template/headers";
             PassToolsResponse response = get(url);
 
-
             JSONObject jsonResponse = response.getBodyAsJSONObject();
             JSONArray templatesArray = (JSONArray)jsonResponse.get("templateHeaders");
 
@@ -139,8 +182,6 @@ public class Template extends PassToolsClient {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
 
