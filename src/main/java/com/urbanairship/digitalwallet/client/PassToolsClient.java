@@ -113,6 +113,8 @@ public class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpGet get = new HttpGet(addApiKey(url));
 
+        setHeaders(get,defaultHeaders());
+
         HttpResponse response = httpclient.execute(get);
 
         handleError(response);
@@ -214,7 +216,7 @@ public class PassToolsClient {
     }
 
     protected static PassToolsResponse delete(String url) throws Exception {
-        return delete(url,Collections.emptyMap());
+        return delete(url, defaultHeaders());
     }
 
     protected static PassToolsResponse delete(String url, Map headers) throws Exception {
