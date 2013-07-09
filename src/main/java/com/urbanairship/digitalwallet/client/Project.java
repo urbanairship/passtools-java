@@ -176,6 +176,9 @@ public class Project extends PassToolsClient {
         return projectType;
     }
 
+    public List<Template> getTemplates() {
+        return templates;
+    }
 
     private void assign(JSONObject json) {
         reset();

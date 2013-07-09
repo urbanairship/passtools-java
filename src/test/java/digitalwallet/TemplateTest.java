@@ -2,9 +2,11 @@ package digitalwallet;
 
 
 import com.urbanairship.digitalwallet.client.PassTools;
+import com.urbanairship.digitalwallet.client.Project;
 import com.urbanairship.digitalwallet.client.Template;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TemplateTest {
@@ -89,15 +91,34 @@ public class TemplateTest {
     @org.testng.annotations.Test
     public void createTemplateXP() {
         PassTools.apiKey = API_KEY;
+
+        String projectName = TestHelper.randomName();
+        String projectDescription = TestHelper.randomDescription();
+        Project project = Project.createProject(projectName, projectDescription, "coupon");
+        assert project != null;
+
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
         String type = randomType();
         String externalId = TestHelper.randomString("external-");
-        Long templateId = Template.createTemplate(externalId, name, description, type, headers, fields);
+        Long templateId = Template.createTemplate(project.getId(), externalId, name, description, type, headers, fields);
 
-        /* todo list the templates for the project and make sure it's there */
+        /* list the templates for the project and make sure it's there */
+        project = Project.getProject(project.getId());
+        assert project != null;
+        List<Template> templates = project.getTemplates();
+
+        boolean found = false;
+        for (Template current : templates) {
+            if (current.getId().equals(templateId)) {
+                found = true;
+                break;
+            }
+        }
+
+        assert found;
 
         /* get the template by the id and make sure it's equal */
         Template template = Template.getTemplate(templateId);
@@ -124,7 +145,19 @@ public class TemplateTest {
         } catch (Exception e) {
         }
 
-        /* todo make sure that the template doesn't show up in the list of templates for this project */
+        /*  make sure that the template doesn't show up in the list of templates for this project */
+        project = Project.getProject(project.getId());
+        assert project != null;
+        templates = project.getTemplates();
+        found = false;
+        for (Template current : templates) {
+            if (current.getId().equals(templateId)) {
+                found = true;
+                break;
+            }
+        }
+
+        assert !found;
     }
 
     /**
@@ -134,9 +167,51 @@ public class TemplateTest {
     public void createTemplateP() {
         PassTools.apiKey = API_KEY;
 
-        /* todo create a project */
-        /* todo create a template with the newly created project id */
-        /* todo list the templates for the project and make sure it's there */
+        /* create a project */
+        String projectName = TestHelper.randomName();
+        String projectDescription = TestHelper.randomDescription();
+        Project project = Project.createProject(projectName, projectDescription, "coupon");
+        assert project != null;
+
+        /* create a template with the newly created project id */
+        Map<String, Object> headers = randomHeaders();
+        Map<String, Object> fields = randomFields();
+        String name = TestHelper.randomName();
+        String description = TestHelper.randomDescription();
+        String type = randomType();
+        Long templateId = Template.createTemplate(project.getId(), name, description, type, headers, fields);
+
+        /* list the templates for the project and make sure it's there */
+        project = Project.getProject(project.getId());
+        assert project != null;
+        List<Template> templates = project.getTemplates();
+
+        boolean found = false;
+        for (Template current : templates) {
+            if (current.getId().equals(templateId)) {
+                found = true;
+                break;
+            }
+        }
+
+        assert found;
+
+        /* delete the template */
+        Template.delete(templateId);
+
+        /*  make sure that the template doesn't show up in the list of templates for this project */
+        project = Project.getProject(project.getId());
+        assert project != null;
+        templates = project.getTemplates();
+        found = false;
+        for (Template current : templates) {
+            if (current.getId().equals(templateId)) {
+                found = true;
+                break;
+            }
+        }
+
+        assert !found;
     }
 
     @org.testng.annotations.Test
