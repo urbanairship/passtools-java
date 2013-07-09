@@ -8,13 +8,25 @@ import java.util.List;
 public class ProjectTest {
     private final String API_KEY = "test";
 
+    private final static int maxPages = 5;
+    private final static int pageSize = 10;
+
     @org.testng.annotations.Test
     public void testGetProjectList() {
         PassTools.apiKey = API_KEY;
-        List<Project> projects = Project.getProjects();
-        for (Project project : projects) {
-            Project p2 = Project.getProject(project.getId());
-            assertEquals(project, p2);
+        boolean done = false;
+        int page = 0;
+        while (!done) {
+            List<Project> projects = Project.getProjects(pageSize, page);
+            if (projects != null && projects.size() > 0 && page < maxPages) {
+                page++;
+                for (Project project : projects) {
+                    Project p2 = Project.getProject(project.getId());
+                    assertEquals(project, p2);
+                }
+            } else {
+                done = true;
+            }
         }
     }
 

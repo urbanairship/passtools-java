@@ -28,6 +28,7 @@ public class Project extends PassToolsClient {
     private String name;
     private String description;
     private String projectType;
+    private List<Template> templates;
 
     private static final String missingProjectIdError = "please pass a valid project Id in!";
     private static final String missingLayoutIdError = "please pass a valid layout Id in!";
@@ -50,10 +51,12 @@ public class Project extends PassToolsClient {
      *
      * @return a list of projects for this user.
      */
-    public static List<Project> getProjects() {
+    public static List<Project> getProjects(int pageSize, int page) {
         try {
             List<Project> projects = new ArrayList<Project>();
-            PassToolsResponse response = get(getBaseUrl());
+            StringBuilder builder = new StringBuilder(getBaseUrl());
+            builder.append("?pageSize=").append(pageSize).append("&page=").append(page);
+            PassToolsResponse response = get(builder.toString());
 
             JSONObject jsonResponse = response.getBodyAsJSONObject();
             JSONArray projectArray = (JSONArray) jsonResponse.get("projects");
@@ -178,10 +181,18 @@ public class Project extends PassToolsClient {
         reset();
 
         if (json != null) {
-            id = (Long) json.get("id");
-            description = (String) json.get("description");
-            name = (String) json.get("name");
-            projectType = (String) json.get("projectType");
+            this.id = (Long) json.get("id");
+            this.description = (String) json.get("description");
+            this.name = (String) json.get("name");
+            this.projectType = (String) json.get("projectType");
+            Object templates = json.get("templates");
+            if (templates != null && templates instanceof JSONArray) {
+                this.templates = new ArrayList<Template>();
+                for (Object o : ((JSONArray) templates).toArray()) {
+                    JSONObject currentJson = (JSONObject)o;
+                    this.templates.add(new Template(currentJson));
+                }
+            }
         }
     }
 

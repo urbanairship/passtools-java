@@ -28,9 +28,9 @@ public class Template extends PassToolsClient {
     private Date createdAt;
     private String vendor;
     private Long vendorId;
-
     private boolean deleted;
     private boolean disabled;
+    private String externalId;
 
     private static final String missingTemplateIdError = "please pass a valid template Id in!";
     private static final String missingExternalIdError = "please pass a valid template Id in!";
@@ -139,8 +139,8 @@ public class Template extends PassToolsClient {
     /**
      * Gets the template specified by templateId
      *
-     * @param templateId    ID of the template you want.
-     * @return              A Template Object with the values from templateId
+     * @param templateId ID of the template you want.
+     * @return A Template Object with the values from templateId
      */
     public static Template getTemplate(Long templateId) {
         try {
@@ -160,8 +160,8 @@ public class Template extends PassToolsClient {
     /**
      * Get the template associated with the externalId
      *
-     * @param externalId    External ID of the template you are looking for.
-     * @return              A template object associated with the externalId
+     * @param externalId External ID of the template you are looking for.
+     * @return A template object associated with the externalId
      */
     public static Template getTemplate(String externalId) {
         try {
@@ -180,7 +180,8 @@ public class Template extends PassToolsClient {
 
     /**
      * Delete a template based on its template id
-     * @param templateId    id of the template you want to delete.
+     *
+     * @param templateId id of the template you want to delete.
      */
     public static void delete(Long templateId) {
         try {
@@ -198,7 +199,7 @@ public class Template extends PassToolsClient {
     /**
      * Delete a template based on its external id
      *
-     * @param externalId    external id of the template you want to delete.
+     * @param externalId external id of the template you want to delete.
      */
     public static void deleteX(String externalId) {
         try {
@@ -217,8 +218,8 @@ public class Template extends PassToolsClient {
     /**
      * Duplicate the specified template and return the newly created templates id.
      *
-     * @param templateId    Template ID of the template you want to duplicate
-     * @return  The template ID of the newly created template.
+     * @param templateId Template ID of the template you want to duplicate
+     * @return The template ID of the newly created template.
      */
     public static Long duplicate(Long templateId) {
         try {
@@ -254,8 +255,8 @@ public class Template extends PassToolsClient {
     /**
      * Duplicate the specified template and return the newly created templates id.
      *
-     * @param externalId    External ID of the template you want to duplicate
-     * @return  The template ID of the newly created template.
+     * @param externalId External ID of the template you want to duplicate
+     * @return The template ID of the newly created template.
      */
     public static Long duplicate(String externalId) {
         try {
@@ -291,8 +292,8 @@ public class Template extends PassToolsClient {
      * Get the template headers.
      *
      * @return A list of template headers.
-     *
-     * todo need to add pagination
+     *         <p/>
+     *         todo need to add pagination
      */
     @SuppressWarnings("unchecked")
     public static List<JSONObject> getMyTemplateHeaders() {
@@ -316,11 +317,11 @@ public class Template extends PassToolsClient {
     /**
      * Update the template with the specified id.
      *
-     * @param templateId    ID of the template you want to update.
-     * @param name          Name you want the template to have.
-     * @param description   Description you want the template to have.
-     * @param headers       Headers for the updated template.
-     * @param fields        Fields for the updated template.
+     * @param templateId  ID of the template you want to update.
+     * @param name        Name you want the template to have.
+     * @param description Description you want the template to have.
+     * @param headers     Headers for the updated template.
+     * @param fields      Fields for the updated template.
      */
     public static void updateTemplate(Long templateId, String name, String description, Map<String, Object> headers, Map<String, Object> fields) {
         checkNotNull(templateId, missingTemplateIdError);
@@ -330,20 +331,22 @@ public class Template extends PassToolsClient {
     /**
      * Update the template with the specified externalId.
      *
-     * @param externalId    external id of the template you want to update.
-     * @param name          Name you want the template to have.
-     * @param description   Description you want the template to have.
-     * @param headers       Headers for the updated template.
-     * @param fields        Fields for the updated template.
+     * @param externalId  external id of the template you want to update.
+     * @param name        Name you want the template to have.
+     * @param description Description you want the template to have.
+     * @param headers     Headers for the updated template.
+     * @param fields      Fields for the updated template.
      */
     public static void updateTemplate(String externalId, String name, String description, Map<String, Object> headers, Map<String, Object> fields) {
         checkNotNull(externalId, missingExternalIdError);
         updateTemplateInternal(name, description, headers, fields, null, externalId);
     }
 
-    /*****************
+    /**
+     * **************
      * Getters
-     *****************/
+     * ***************
+     */
     public Map<String, Object> getTemplateHeader() {
         return templateHeader;
     }
@@ -400,19 +403,18 @@ public class Template extends PassToolsClient {
         return disabled;
     }
 
-    /*****************
+    public String getExternalId() {
+        return externalId;
+    }
+
+    /**
+     * **************
      * private methods
-     *****************/
+     * ***************
+     */
 
-    @SuppressWarnings("unchecked")
-    private void assign(JSONObject response) {
-        reset();
-
-        JSONObject headers = (JSONObject) response.get("templateHeader");
-        this.templateHeader = new JSONObject();
-        this.fieldsModel = (JSONObject) response.get("fieldsModel");
-
-        for (Map.Entry<String, Object> current : ((Map<String, Object>) headers).entrySet()) {
+    private void assignHeaders(Map<String, Object> headers) {
+        for (Map.Entry<String, Object> current : headers.entrySet()) {
             String key = current.getKey();
             Object value = current.getValue();
             if (key.equals("id")) {
@@ -439,9 +441,25 @@ public class Template extends PassToolsClient {
                 this.vendor = value.toString();
             } else if (key.equals("vendorId")) {
                 this.vendorId = toLong(value);
+            } else if (key.equals("externalId")) {
+                this.externalId = value.toString();
             } else {
                 this.templateHeader.put(key, current.getValue());
             }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assign(JSONObject response) {
+        reset();
+
+        JSONObject headers = (JSONObject) response.get("templateHeader");
+        this.templateHeader = new JSONObject();
+        if (headers != null) {
+            this.fieldsModel = (JSONObject) response.get("fieldsModel");
+            assignHeaders(headers);
+        } else {
+            assignHeaders(response);
         }
     }
 

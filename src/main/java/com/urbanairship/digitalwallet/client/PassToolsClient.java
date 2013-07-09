@@ -58,7 +58,11 @@ public abstract class PassToolsClient {
     }
 
     protected static String addApiKey(String url) throws Exception {
-        return url + "?api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
+        if (url.indexOf('?') < 0) {
+            return url + "?api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
+        } else {
+            return url + "&api_key=" + URLEncoder.encode(PassTools.apiKey, "UTF-8");
+        }
     }
 
     protected static void handleError(HttpResponse response) throws IOException, PassToolsException {
@@ -114,7 +118,7 @@ public abstract class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpGet get = new HttpGet(addApiKey(url));
 
-        setHeaders(get,defaultHeaders());
+        setHeaders(get, defaultHeaders());
 
         HttpResponse response = httpclient.execute(get);
 
@@ -125,10 +129,9 @@ public abstract class PassToolsClient {
     }
 
 
-
-    protected static Map defaultHeaders(){
-        Map<String, String> headers = new HashMap<String,String>();
-        headers.put("Accept","application/json");
+    protected static Map defaultHeaders() {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Accept", "application/json");
         headers.put("Api-Revision", PassTools.VERSION);
         return headers;
     }
@@ -153,7 +156,7 @@ public abstract class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpPost post = new HttpPost(url);
 
-        setHeaders(post,headers);
+        setHeaders(post, headers);
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
@@ -180,7 +183,7 @@ public abstract class PassToolsClient {
 
 
     protected static PassToolsResponse post(String url, Map formFields) throws Exception {
-        return post(url,formFields,defaultHeaders());
+        return post(url, formFields, defaultHeaders());
     }
 
 
@@ -190,7 +193,7 @@ public abstract class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpPut put = new HttpPut(url);
 
-        setHeaders(put,headers);
+        setHeaders(put, headers);
 
         List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 
@@ -226,7 +229,7 @@ public abstract class PassToolsClient {
         HttpClient httpclient = getHttpClient();
         HttpDelete delete = new HttpDelete(addApiKey(url));
 
-        setHeaders(delete,headers);
+        setHeaders(delete, headers);
 
 
         HttpResponse response = httpclient.execute(delete);
