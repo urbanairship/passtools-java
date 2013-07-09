@@ -633,12 +633,4 @@ public class Template extends PassToolsClient {
             throw new RuntimeException(e);
         }
     }
-
-    private static void checkNotNull(Object o, String message) {
-        try {
-            Preconditions.checkNotNull(o, message);
-        } catch (NullPointerException e) {
-            throw new InvalidParameterException(e.getMessage());
-        }
-    }
 }

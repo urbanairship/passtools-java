@@ -1,6 +1,7 @@
 package com.urbanairship.digitalwallet.client;
 
 
+import com.google.common.base.Preconditions;
 import com.urbanairship.digitalwallet.client.exception.*;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
@@ -31,7 +32,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class PassToolsClient {
+public abstract class PassToolsClient {
 
     private static void handleAPIError(String responseBody, int responseCode) throws PassToolsException {
         switch (responseCode) {
@@ -237,5 +238,11 @@ public class PassToolsClient {
 
     }
 
-
+    protected static void checkNotNull(Object o, String message) {
+        try {
+            Preconditions.checkNotNull(o, message);
+        } catch (NullPointerException e) {
+            throw new InvalidParameterException(e.getMessage());
+        }
+    }
 }
