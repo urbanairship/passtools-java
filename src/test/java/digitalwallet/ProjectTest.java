@@ -79,6 +79,81 @@ public class ProjectTest {
         }
     }
 
+    @org.testng.annotations.Test
+    public void testUpdateProject() {
+        PassTools.apiKey = API_KEY;
+        String name = TestHelper.randomName();
+        String description = TestHelper.randomDescription();
+        String projectType = "coupon";
+
+        Project createdProject = Project.createProject(name, description, projectType);
+        assert createdProject != null;
+        assertEquals(createdProject.getId(), name, description, projectType, createdProject);
+
+        Long projectId = createdProject.getId();
+        Project project = Project.getProject(createdProject.getId());
+        assertEquals(projectId, name, description, projectType, project);
+
+        name = TestHelper.randomName();
+        description = TestHelper.randomDescription();
+        Project.updateProject(projectId, name, description);
+
+        project = Project.getProject(createdProject.getId());
+        assertEquals(projectId, name, description, projectType, project);
+
+        Project.deleteProject(projectId);
+
+        try {
+            Project.getProject(projectId);
+            assert false; /* should have thrown a 404 */
+        } catch (Exception e) {
+
+        }
+    }
+
+    @org.testng.annotations.Test
+    public void testUpdateProjectX() {
+        PassTools.apiKey = API_KEY;
+        String externalId = TestHelper.randomString("external-");
+        String name = TestHelper.randomName();
+        String description = TestHelper.randomDescription();
+        String projectType = "coupon";
+
+        Project createdProject = Project.createProject(externalId, name, description, projectType);
+        assert createdProject != null;
+        Long projectId = createdProject.getId();
+        assertEquals(projectId, name, description, projectType, createdProject);
+
+        Project project = Project.getProject(createdProject.getId());
+        assertEquals(projectId, name, description, projectType, project);
+
+        project = Project.getProject(externalId);
+        assertEquals(projectId, name, description, projectType, project);
+
+        name = TestHelper.randomName();
+        description = TestHelper.randomDescription();
+        Project.updateProject(externalId, name, description);
+
+        project = Project.getProject(externalId);
+        assertEquals(projectId, name, description, projectType, project);
+
+        Project.deleteProject(externalId);
+
+        try {
+            Project.getProject(externalId);
+            assert false; /* should have thrown a 404 */
+        } catch (Exception e) {
+
+        }
+
+        try {
+            Project.getProject(projectId);
+            assert false; /* should have thrown a 404 */
+        } catch (Exception e) {
+
+        }
+    }
+
     private void assertEquals(Project p1, Project p2) {
         assert p1 != null;
         assert p2 != null;

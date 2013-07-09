@@ -118,12 +118,11 @@ public class Project extends PassToolsClient {
         return createProjectInternal(name, description, projectType, null, layoutId);
     }
 
-    public static Long updateProject(Long projectId, String name, String description) {
+    public static Project updateProject(Long projectId, String name, String description) {
         return updateProjectInternal(projectId, name, description);
-
     }
 
-    public static Long updateProject(String externalId, String name, String description) {
+    public static Project updateProject(String externalId, String name, String description) {
         checkNotNull(externalId, missingExternalIdError);
         Project project = getProject(externalId);
         if (project != null) {
@@ -225,7 +224,7 @@ public class Project extends PassToolsClient {
 
     }
 
-    private static Long updateProjectInternal(Long projectId, String name, String description) {
+    private static Project updateProjectInternal(Long projectId, String name, String description) {
         try {
             Long id = null;
             checkNotNull(projectId, missingProjectIdError);
@@ -239,10 +238,7 @@ public class Project extends PassToolsClient {
 
             PassToolsResponse response = put(builder.toString(), formFields);
             JSONObject o = response.getBodyAsJSONObject();
-            if (o != null) {
-                id = (Long) o.get("projectId");
-            }
-            return id;
+            return new Project(o);
         } catch (RuntimeException rte) {
             throw rte;
         } catch (Exception e) {
