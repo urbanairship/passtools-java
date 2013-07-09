@@ -49,8 +49,8 @@ public class Template extends PassToolsClient {
      ** POST        /{projectId}/id/{externalId}    Create a template and assign it to a project, and give the template an external id
      ** POST        /duplicate/{templateId}         Create a new template with the contents of the specified template.
      ** POST        /duplicate/id/{externalId}      Create a new template with the contents of the specified template, by external id.
-     * PUT         /{strTemplateId}                Modify the specified template
-     * PUT         /id/{externalId}                Modify the specified template
+     ** PUT         /{strTemplateId}                Modify the specified template
+     ** PUT         /id/{externalId}                Modify the specified template
      *
      * POST        /{templateId}/locations         Add locations to a template
      * POST        /id/{externalId}/locations      Add locations to a template based on the templates external id
@@ -574,8 +574,10 @@ public class Template extends PassToolsClient {
         return formFields;
     }
 
-    private static void updateTemplateInternal(String name, String description, Map<String, Object> headers, Map<String, Object> fields, Long templateId, String externalId) {
+    private static Long updateTemplateInternal(String name, String description, Map<String, Object> headers, Map<String, Object> fields, Long templateId, String externalId) {
         try {
+            Long id = null;
+
             /* check preconditions */
             try {
                 Preconditions.checkNotNull(fields, "please pass a map of fields in!");
@@ -611,11 +613,11 @@ public class Template extends PassToolsClient {
             PassToolsResponse response = put(builder.toString(), formFields);
 
             JSONObject jsonObj = response.getBodyAsJSONObject();
-            /*
+
             Object o = jsonObj.get("templateId");
 
             if (o != null) {
-                Long id = null;
+                id = null;
                 if (o instanceof Long) {
                     id = (Long) o;
                 } else {
@@ -625,9 +627,8 @@ public class Template extends PassToolsClient {
                         ex.printStackTrace();
                     }
                 }
-                return id;
             }
-            */
+            return id;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
