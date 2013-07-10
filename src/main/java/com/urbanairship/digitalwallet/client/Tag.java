@@ -79,10 +79,8 @@ public class Tag extends PassToolsClient {
     }
 
     public static List<Pass> getPasses(String tag) {
-
+        checkNotNull(tag, missingTagError);
         try {
-            checkNotNull(tag, missingTagError);
-
             List<Pass> passes = new ArrayList<Pass>();
 
             StringBuilder builder = new StringBuilder(getBaseUrl());
@@ -108,8 +106,8 @@ public class Tag extends PassToolsClient {
     }
 
     public static Long updatePasses(String tag, Map fields) {
+        checkNotNull(tag, missingTagError);
         try {
-            checkNotNull(tag, missingTagError);
             StringBuilder builder = new StringBuilder(getBaseUrl());
             builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
             Map formParams = new HashMap<String, Object>();
@@ -125,12 +123,11 @@ public class Tag extends PassToolsClient {
             throw new RuntimeException(e);
         }
 
-        /* todo implement this */
     }
 
     public static boolean deleteTag(String tag) {
+        checkNotNull(tag, missingTagError);
         try {
-            checkNotNull(tag, missingTagError);
             String url = getBaseUrl() + "/" + URLEncoder.encode(tag, "UTF-8");
             PassToolsResponse response = delete(url);
             JSONObject jsonObjResponse = response.getBodyAsJSONObject();
@@ -145,12 +142,12 @@ public class Tag extends PassToolsClient {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        /* todo implement this */
+
     }
 
     public static boolean removeFromPasses(String tag) {
+        checkNotNull(tag, missingTagError);
         try {
-            checkNotNull(tag, missingTagError);
             StringBuilder builder = new StringBuilder(getBaseUrl());
             builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
             PassToolsResponse response = delete(builder.toString());
@@ -167,25 +164,46 @@ public class Tag extends PassToolsClient {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-
-        /* todo implement this */
     }
 
-    public static void removeFromPass(String tag, Long passId) {
-        try {
+    public static boolean removeFromPass(String tag, Long passId) {
         checkNotNull(tag, missingTagError);
-        }
-        catch (RuntimeException e) {
+        try {
+            StringBuilder builder = new StringBuilder(getBaseUrl());
+            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/pass/").append(passId);
+            PassToolsResponse response = delete(builder.toString());
+            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
+            String status = (String) jsonObjResponse.get("status");
+            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException();
-        /* todo implement this */
         }
     }
 
-    public static void removeFromPass(String tag, String externalId) {
+    public static boolean removeFromPass(String tag, String externalId) {
         checkNotNull(tag, missingTagError);
-        /* todo implement this */
+        try {
+            StringBuilder builder = new StringBuilder(getBaseUrl());
+            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/pass/id/").append(externalId);
+            PassToolsResponse response = delete(builder.toString());
+            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
+            String status = (String) jsonObjResponse.get("status");
+            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     private void reset() {
