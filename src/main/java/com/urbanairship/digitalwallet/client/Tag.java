@@ -11,6 +11,7 @@ package com.urbanairship.digitalwallet.client;
     DELETE      /{tag}/pass/id/{externalId}     Remove a pass from a tag by it's external id.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,6 +19,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class Tag extends PassToolsClient {
     private Long id;
@@ -93,7 +95,7 @@ public class Tag extends PassToolsClient {
             if (passArray != null) {
                 for (Object o : passArray.toArray()) {
                     if (o instanceof JSONObject) {
-                        passes.add(new Pass((JSONObject)o));
+                        passes.add(new Pass((JSONObject) o));
                     }
                 }
             }
@@ -105,24 +107,80 @@ public class Tag extends PassToolsClient {
         }
     }
 
-    public static void updatePasses(String tag, Map fields) {
-        checkNotNull(tag, missingTagError);
+    public static Long updatePasses(String tag, Map fields) {
+        try {
+            checkNotNull(tag, missingTagError);
+            StringBuilder builder = new StringBuilder(getBaseUrl());
+            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
+            Map formParams = new HashMap<String, Object>();
+            formParams.put("json", new JSONObject(fields));
+            PassToolsResponse response = put(builder.toString(), formParams);
+
+            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
+            Long ticketId = (Long) jsonObjResponse.get("ticketId");
+            return ticketId;
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         /* todo implement this */
     }
 
-    public static void deleteTag(String tag) {
-        checkNotNull(tag, missingTagError);
+    public static boolean deleteTag(String tag) {
+        try {
+            checkNotNull(tag, missingTagError);
+            String url = getBaseUrl() + "/" + URLEncoder.encode(tag, "UTF-8");
+            PassToolsResponse response = delete(url);
+            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
+            String status = (String) jsonObjResponse.get("status");
+            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         /* todo implement this */
     }
 
-    public static void removeFromPasses(String tag) {
-        checkNotNull(tag, missingTagError);
+    public static boolean removeFromPasses(String tag) {
+        try {
+            checkNotNull(tag, missingTagError);
+            StringBuilder builder = new StringBuilder(getBaseUrl());
+            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
+            PassToolsResponse response = delete(builder.toString());
+            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
+            String status = (String) jsonObjResponse.get("status");
+            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
         /* todo implement this */
     }
 
     public static void removeFromPass(String tag, Long passId) {
+        try {
         checkNotNull(tag, missingTagError);
+        }
+        catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException();
         /* todo implement this */
+        }
     }
 
     public static void removeFromPass(String tag, String externalId) {
@@ -139,8 +197,8 @@ public class Tag extends PassToolsClient {
     private void assign(JSONObject o) {
         reset();
         if (o != null) {
-            id = (Long)o.get("id");
-            tag = (String)o.get("tag");
+            id = (Long) o.get("id");
+            tag = (String) o.get("tag");
         }
     }
 
