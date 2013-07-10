@@ -93,7 +93,7 @@ public class Tag extends PassToolsClient {
             if (passArray != null) {
                 for (Object o : passArray.toArray()) {
                     if (o instanceof JSONObject) {
-                        passes.add(new Pass((JSONObject)o));
+                        passes.add(new Pass((JSONObject) o));
                     }
                 }
             }
@@ -139,8 +139,12 @@ public class Tag extends PassToolsClient {
     private void assign(JSONObject o) {
         reset();
         if (o != null) {
-            id = (Long)o.get("id");
-            tag = (String)o.get("tag");
+            id = (Long) o.get("id");
+            if (o.get("tag") != null) {
+                tag = (String) o.get("tag");
+            } else if (o.get("name") != null) {
+                tag = (String) o.get("name");
+            }
         }
     }
 

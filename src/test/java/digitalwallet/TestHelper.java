@@ -9,6 +9,10 @@ public class TestHelper {
         return TestHelper.randomString("description-");
     }
 
+    public static String randomTag() {
+        return TestHelper.randomString("tag-");
+    }
+
     public static String randomName() {
         return TestHelper.randomString("name-");
     }
