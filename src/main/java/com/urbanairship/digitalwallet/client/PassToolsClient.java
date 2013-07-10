@@ -20,6 +20,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
@@ -247,5 +249,52 @@ public abstract class PassToolsClient {
         } catch (NullPointerException e) {
             throw new InvalidParameterException(e.getMessage());
         }
+    }
+
+
+    protected Date toTime(String time) {
+        DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser();
+        org.joda.time.DateTime dt = fmt.parseDateTime(time);
+        if (dt != null) {
+            return dt.toDate();
+        }
+        return null;
+    }
+
+    protected Boolean toBool(Object o) {
+        Boolean b = false;
+        if (o != null) {
+            if (o instanceof Boolean) {
+                b = (Boolean) o;
+            } else if (o instanceof Long) {
+                b = (0 != (Long) o);
+            } else if (o instanceof Integer) {
+                b = (0 != (Integer) o);
+            } else if (o instanceof Double) {
+                b = (0. != (Double) o);
+            } else if (o instanceof String) {
+                String str = (String) o;
+                b = str.equalsIgnoreCase("true") || str.equals("1");
+            }
+        }
+        return b;
+    }
+
+    protected Long toLong(Object o) {
+        Long l = null;
+
+        if (o != null) {
+            if (o instanceof Long) {
+                l = (Long) o;
+            } else {
+                try {
+                    l = Long.valueOf(o.toString());
+                } catch (NumberFormatException e) {
+                    l = null;
+                }
+            }
+        }
+
+        return l;
     }
 }

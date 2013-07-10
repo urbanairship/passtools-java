@@ -47,7 +47,6 @@ public class Project extends PassToolsClient {
 
     /**
      * Get the list of projects
-     * todo need to add pagination
      *
      * @return a list of projects for this user.
      */
@@ -139,7 +138,6 @@ public class Project extends PassToolsClient {
             checkNotNull(id, missingProjectIdError);
             String url = getBaseUrl() + "/" + id;
             PassToolsResponse response = delete(url);
-            int breakHere = 2;
         } catch (RuntimeException rte) {
             throw rte;
         } catch (Exception e) {
@@ -152,7 +150,6 @@ public class Project extends PassToolsClient {
             checkNotNull(externalId, missingExternalIdError);
             String url = getBaseUrl() + "/id/" + externalId;
             PassToolsResponse response = delete(url);
-            int breakHere = 2;
         } catch (RuntimeException rte) {
             throw rte;
         } catch (Exception e) {

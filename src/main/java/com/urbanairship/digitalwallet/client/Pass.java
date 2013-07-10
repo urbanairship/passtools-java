@@ -16,15 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Pass extends PassToolsClient {
-    public Map fields; // (field key, JSONObject )
-    public Long passId;
-    public Long templateId;
-    public String url;
+    private Map fields; // (field key, JSONObject )
+    private Long passId;
+    private Long templateId;
+    private String url;
+    private String externalId;
 
-    private static void checkNotNullPassId(Long passId) {
-        if (passId == null) {
-            throw new InvalidParameterException("please input a valid Pass!");
-        }
+    private static final String missingPassIdError = "please pass a valid pass Id in!";
+
+    public Pass() {
+
+    }
+
+    public Pass(JSONObject response) {
+        assign(response);
     }
 
     /* Creates a pass with the Map fiedsModel set. The Map fiedsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder */
@@ -83,7 +88,7 @@ public class Pass extends PassToolsClient {
 
     public static Pass get(Long passId) {
         try {
-            checkNotNullPassId(passId);
+            checkNotNull(passId, missingPassIdError);
             String url = PassTools.API_BASE + "/pass/" + passId.toString();
             PassToolsResponse response = get(url);
 
@@ -136,7 +141,7 @@ public class Pass extends PassToolsClient {
     public static void delete(Long passId){
         try {
 
-            checkNotNullPassId(passId);
+            checkNotNull(passId, missingPassIdError);
 
             String url = PassTools.API_BASE + "/pass/" + passId.toString();
 
@@ -151,7 +156,7 @@ public class Pass extends PassToolsClient {
 
     public static JSONObject viewPassbookJSONPass(Long passId){
         try {
-            checkNotNullPassId(passId);
+            checkNotNull(passId, missingPassIdError);
             String url = PassTools.API_BASE + "/pass/" + passId.toString() +"/viewJSONPass";
             PassToolsResponse response = get(url);
             return response.getBodyAsJSONObject();
@@ -164,7 +169,7 @@ public class Pass extends PassToolsClient {
 
     public static JSONObject push(Long passId) {
         try {
-            checkNotNullPassId(passId);
+            checkNotNull(passId, missingPassIdError);
             String url = PassTools.API_BASE + "/pass/" + passId.toString() + "/push";
             PassToolsResponse response = put(url, Collections.emptyMap());
             return response.getBodyAsJSONObject();
@@ -211,4 +216,39 @@ public class Pass extends PassToolsClient {
             throw new RuntimeException(e);
         }
     }
+
+    public Map getFields() {
+        return fields;
+    }
+
+    public Long getPassId() {
+        return passId;
+    }
+
+    public Long getTemplateId() {
+        return templateId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    private void reset() {
+
+    }
+
+    private void assign(JSONObject response) {
+        reset();
+
+        if (response != null) {
+
+            passId = toLong(response.get("id"));
+            templateId = toLong(response.get("templateId"));
+            if (response.get("externalId") != null) {
+                externalId = (String)response.get("externalId");
+            }
+            url = (String)response.get("url");
+        }
+    }
+
 }
