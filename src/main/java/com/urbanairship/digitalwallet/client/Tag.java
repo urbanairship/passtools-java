@@ -198,7 +198,11 @@ public class Tag extends PassToolsClient {
         reset();
         if (o != null) {
             id = (Long) o.get("id");
-            tag = (String) o.get("tag");
+            if (o.get("tag") != null) {
+                tag = (String) o.get("tag");
+            } else if (o.get("name") != null) {
+                tag = (String) o.get("name");
+            }
         }
     }
 
