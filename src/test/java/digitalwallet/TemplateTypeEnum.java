@@ -1,7 +1,9 @@
 package digitalwallet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public enum TemplateTypeEnum {
     BOARDING_PASS(1L, "boardingPass", "Boarding Pass", 1),
@@ -23,20 +25,24 @@ public enum TemplateTypeEnum {
 
     private static List<TemplateTypeEnum> appleTemplateTypes;
     private static List<TemplateTypeEnum> googleTemplateTypes;
+    private static Map<Long, String> jsonNameLookup;
+    private static Map<Long, String> displayNameLookup;
 
     static {
         appleTemplateTypes = new ArrayList<TemplateTypeEnum>();
+        googleTemplateTypes = new ArrayList<TemplateTypeEnum>();
+        jsonNameLookup = new HashMap<Long, String>();
+        displayNameLookup = new HashMap<Long, String>();
+
         for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
             if (current.getVendorId() == 1) {
                 appleTemplateTypes.add(current);
-            }
-        }
-
-        googleTemplateTypes = new ArrayList<TemplateTypeEnum>();
-        for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
-            if (current.getVendorId() == 2) {
+            } else if (current.getVendorId() == 2) {
                 googleTemplateTypes.add(current);
             }
+
+            jsonNameLookup.put(current.getCode(), current.getJsonName());
+            displayNameLookup.put(current.getCode(), current.getDisplayName());
         }
     }
 
@@ -65,10 +71,8 @@ public enum TemplateTypeEnum {
     }
 
     public static String jsonKeyName(Long code) {
-        for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
-            if (current.code.equals(code)) {
-                return current.jsonName;
-            }
+        if (jsonNameLookup.containsKey(code)) {
+            return jsonNameLookup.get(code);
         }
 
         throw new RuntimeException("invalid template type " + code);
@@ -91,10 +95,8 @@ public enum TemplateTypeEnum {
     }
 
     public static String displayName(Long code) {
-        for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
-            if (current.code.equals(code)) {
-                return current.displayName;
-            }
+        if (displayNameLookup.containsKey(code)) {
+            return displayNameLookup.get(code);
         }
 
         throw new RuntimeException("invalid template type " + code);
