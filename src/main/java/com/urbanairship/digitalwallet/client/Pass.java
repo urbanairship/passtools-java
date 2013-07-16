@@ -81,6 +81,13 @@ public class Pass extends PassToolsClient {
      * methods
      ***********/
 
+    /**
+     * List your passes.
+     *
+     * @param pageSize  The number of passes you want returned per request.
+     * @param page      The page you want returned, starting with 1.
+     * @return          A list of passes.
+     */
     public static List<Pass> listPasses(int pageSize, int page) {
         try {
             List<Pass> passes = new ArrayList<Pass>();
@@ -107,50 +114,118 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Get the tags associated with the specified pass.
+     *
+     * @param passId    Pass you want the tags of.
+     * @return          A list of tags that the specified pass is a member of.
+     */
     public static List<Tag> getTags(long passId) {
         return getTagsInternal(getBaseUrl(passId));
     }
 
+    /**
+     * Get the tags associated with the specified pass.
+     *
+     * @param externalId    Pass you want the tags of.
+     * @return              A list of tags that the specified pass is a member of.
+     */
     public static List<Tag> getTags(String externalId) {
         checkNotNull(externalId, missingExternalId);
         return getTagsInternal(getBaseUrl(externalId));
     }
 
+    /**
+     * Add the specified pass to the specified list of tags.
+     *
+     * @param passId    pass you want to add to the tags.
+     * @param tags      List of tags you want the pass added to.
+     * @return          A list of tags that the pass was added to.
+     *                  Not including tags that the list already belonged to.
+     */
     public static List<String> addTags(long passId, List<String> tags) {
         checkNotNull(tags, missingTagsError);
         return addTagsInternal(getBaseUrl(passId), tags);
     }
 
+    /**
+     * Add the specified pass to the specified list of tags.
+     *
+     * @param externalId    pass you want to add to the tags.
+     * @param tags          List of tags you want the pass added to.
+     * @return              A list of tags that the pass was added to.
+     *                      Not including tags that the list already belonged to.
+     */
     public static List<String> addTags(String externalId, List<String> tags) {
         checkNotNull(externalId, missingExternalId);
         checkNotNull(tags, missingTagsError);
         return addTagsInternal(getBaseUrl(externalId), tags);
     }
 
+    /**
+     * Add the specified pass to the specified tag.
+     *
+     * @param passId    ID of the pass you want to add to the tag.
+     * @param tag       tag you want to add the pass to.
+     * @return          a list of tags, either empty or 1 entry.
+     *                  If the pass already belonged to the tag then 1 entry, otherwise empty.
+     */
     public static List<String> addTag(long passId, String tag) {
         checkNotNull(tag, missingTagsError);
         return addTagInternal(getBaseUrl(passId), tag);
     }
 
+    /**
+     * Add the specified pass to the specified tag.
+     *
+     * @param externalId External ID of the pass you want to add to the tag.
+     * @param tag       tag you want to add the pass to.
+     * @return          a list of tags, either empty or 1 entry.
+     *                  If the pass already belonged to the tag then 1 entry, otherwise empty.
+     */
     public static List<String> addTag(String externalId, String tag) {
         checkNotNull(externalId, missingExternalId);
         checkNotNull(tag, missingTagsError);
         return addTagInternal(getBaseUrl(externalId), tag);
     }
 
-    /* Creates a pass with the Map fieldsModel set. The Map fieldsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder */
-
+    /**
+     * Creates a pass with the Map fieldsModel set. The Map fieldsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder
+     *
+     * @param templateId    Template you want to create the new pass on.
+     * @param passFields    Updated fields for this pass, call getTemplateModel() then update the fields for this pass.
+     * @return              The newly created pass.
+     */
     public static Pass create(long templateId, Map passFields) {
         checkNotNull(passFields, missingPassFieldsError);
         return createInternal(getBaseUrl(templateId), passFields);
     }
 
+    /**
+     * Creates a pass with the Map fieldsModel set. The Map fieldsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder.
+     * The newly created pass will have the passExternalId assigned to it.
+     *
+     * @param templateId    Template you want to create the new pass on.
+     * @param passFields    Updated fields for this pass, call getTemplateModel() then update the fields for this pass.
+     * @param passExternalId External ID you want assigned to this pass.
+     * @return              The newly created pass.
+     */
     public static Pass create(long templateId, String passExternalId, Map passFields) {
         checkNotNull(passFields, missingPassFieldsError);
         checkNotNull(passExternalId, missingExternalId);
         return createInternal(getBaseUrl(templateId) + "/id/" + passExternalId, passFields);
     }
 
+
+    /**
+     * Creates a pass with the Map fieldsModel set. The Map fieldsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder.
+     * The newly created pass will have the passExternalId assigned to it.
+     *
+     * @param templateExternalId    Template you want to create the new pass on.
+     * @param passExternalId        External ID you want assigned to this pass.
+     * @param passFields            Updated fields for this pass, call getTemplateModel() then update the fields for this pass.
+     * @return                      The newly created pass.
+     */
     public static Pass create(String templateExternalId, String passExternalId, Map passFields) {
         checkNotNull(templateExternalId, missingExternalTemplateIdError);
         checkNotNull(passFields, missingPassFieldsError);
@@ -158,8 +233,13 @@ public class Pass extends PassToolsClient {
         return createInternal(getBaseUrl(templateExternalId) + "/id/" + passExternalId, passFields);
     }
 
-
-
+    /**
+     * Update the specified pass.
+     *
+     * @param passId    ID of the pass you want to update.
+     * @param fields    Updated fields for the pass, call getPass first then update the fields.
+     * @return          The updated Pass.
+     */
     @SuppressWarnings("unchecked")
     public static Pass update(long passId, Map fields) {
         checkNotNull(fields, missingPassFieldsError);
@@ -179,6 +259,13 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Update the specified pass.
+     *
+     * @param externalId    external Id of the pass you want to update.
+     * @param fields        Updated fields for the pass, call getPass first then update the fields.
+     * @return              The updated Pass.
+     */
     @SuppressWarnings("unchecked")
     public static Pass update(String externalId, Map fields) {
         checkNotNull(externalId, missingExternalId);
@@ -199,6 +286,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Update the specified pass.
+     *
+     * @param pass  Pass you want to update, with the fields already updated.
+     *              Call getPass, update the fields on the returned pass, then call update with the modified pass.
+     */
     @SuppressWarnings("unchecked")
     public static void update(Pass pass) {
         checkNotNull(pass, missingPassError);
@@ -221,6 +314,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Get the specified pass.
+     *
+     * @param passId    Id of the pass you want to get.
+     * @return          the pass.
+     */
     public static Pass get(long passId) {
         try {
             String url = getBaseUrl(passId);
@@ -234,6 +333,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Get the specified pass.
+     *
+     * @param externalId    external id of the pass you want to get.
+     * @return              the pass.
+     */
     public static Pass getPass(String externalId) {
         checkNotNull(externalId, missingExternalId);
 
@@ -249,15 +354,32 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Download the specified pass.  Apple passes only.
+     *
+     * @param passId    ID of the pass you want to download
+     * @param to        File you want the pass written to.
+     */
     public static void downloadPass(long passId, File to) {
         downloadPassInternal(getBaseUrl(passId) + "/download", to);
     }
 
+    /**
+     * Download the specified pass.  Apple passes only.
+     *
+     * @param externalId    ID of the pass you want to download
+     * @param to            File you want the pass written to.
+     */
     public static void downloadPass(String externalId, File to) {
         checkNotNull(externalId, missingExternalId);
         downloadPassInternal(getBaseUrl(externalId) + "/download", to);
     }
 
+    /**
+     * Delete the specified pass.
+     *
+     * @param passId    ID of the pass you want to delete.
+     */
     public static void delete(long passId) {
         try {
             String url = getBaseUrl(passId);
@@ -269,6 +391,11 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Delete the specified pass.
+     *
+     * @param externalId ID of the pass you want to delete.
+     */
     public static void deleteX(String externalId) {
         checkNotNull(externalId, missingExternalId);
 
@@ -282,6 +409,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * View the JSON for the specified pass.  This is the same JSON you would use if you were calling Apple PassKit directly.
+     *
+     * @param passId  Id of the pass you want the json of.
+     * @return        The JSON for the specified pass, same JSON you would use if you were calling Apple PassKit directly.
+     */
     public static JSONObject viewPassbookJSONPass(long passId) {
         try {
             String url = getBaseUrl(passId) + "/viewJSONPass";
@@ -294,6 +427,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * View the JSON for the specified pass.  This is the same JSON you would use if you were calling Apple PassKit directly.
+     *
+     * @param externalId  Id of the pass you want the json of.
+     * @return        The JSON for the specified pass, same JSON you would use if you were calling Apple PassKit directly.
+     */
     public static JSONObject viewPassbookJSONPass(String externalId) {
         checkNotNull(externalId, missingExternalId);
 
@@ -308,6 +447,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Tell Apple that the pass has been updated, based on pass' id.
+     *
+     * @param passId  ID of the pass you want to push.
+     * @return        A JSON object with the list of devices that were updated.
+     */
     public static JSONObject push(long passId) {
         try {
             String url = getBaseUrl(passId) + "/push";
@@ -320,6 +465,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Tell Apple that the pass has been updated, based on pass' external id.
+     *
+     * @param externalId External ID of the pass you want to push.
+     * @return        A JSON object with the list of devices that were updated.
+     */
     public static JSONObject push(String externalId) {
         checkNotNull(externalId, missingExternalId);
 
@@ -334,16 +485,91 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * Add the specified locations to the specified pass.
+     *
+     * @param passId        Pass you want to add the locations to.
+     * @param locationInfo  Locations you want added.
+     * @return              A list of locations
+     * [
+     *  {
+     *      "passLocationId":65,
+     *      "value":{
+     *          "region":"CA",
+     *          "regionCode":"94404",
+     *          "relevantText":"Hello loc0!",
+     *          "streetAddress1":"add11",
+     *          "streetAddress2":"add22",
+     *          "longitude":-122.3742
+     *          "latitude":37.618,
+     *          "city":"FC"
+     *      }
+     *  },
+     *  {
+     *      "passLocationId":66,
+     *      "value":{
+     *          "region":"CA",
+     *          "regionCode":"94404",
+     *          "relevantText":"Hello loc1!",
+     *          "streetAddress1":"add12",
+     *          "streetAddress2":"add23",
+     *          "longitude":-123.374,
+     *          "latitude":38.618,
+     *          "city":"FC"
+     *      }
+     *  }
+     * ]
+     */
     public static JSONArray addLocations(long passId, List<LocationInfo> locationInfo) {
         return addLocationsInternal(getBaseUrl(passId) + "/locations", locationInfo);
     }
 
+    /**
+     * Add the specified locations to the specified pass.
+     *
+     * @param externalId    Pass you want to add the locations to.
+     * @param locationInfo  Locations you want added.
+     * @return              A list of locations
+     * [
+     *  {
+     *      "passLocationId":65,
+     *      "value":{
+     *          "region":"CA",
+     *          "regionCode":"94404",
+     *          "relevantText":"Hello loc0!",
+     *          "streetAddress1":"add11",
+     *          "streetAddress2":"add22",
+     *          "longitude":-122.3742
+     *          "latitude":37.618,
+     *          "city":"FC"
+     *      }
+     *  },
+     *  {
+     *      "passLocationId":66,
+     *      "value":{
+     *          "region":"CA",
+     *          "regionCode":"94404",
+     *          "relevantText":"Hello loc1!",
+     *          "streetAddress1":"add12",
+     *          "streetAddress2":"add23",
+     *          "longitude":-123.374,
+     *          "latitude":38.618,
+     *          "city":"FC"
+     *      }
+     *  }
+     * ]
+     */
     public static JSONArray addLocations(String externalId, List<LocationInfo> locationInfo) {
         checkNotNull(externalId, missingExternalId);
         return addLocationsInternal(getBaseUrl(externalId) + "/locations", locationInfo);
     }
 
-    /* deletes a location from the pass */
+    /**
+     * deletes a location from the pass
+     *
+     * @param passId            id of the pass you want to remove the location from.
+     * @param passLocationId    id of the location you want to remove.
+     */
     public static void deleteLocation(long passId, long passLocationId) {
         try {
             String url = getBaseUrl(passId) + "/location/" + String.valueOf(passLocationId);
@@ -355,6 +581,12 @@ public class Pass extends PassToolsClient {
         }
     }
 
+    /**
+     * deletes a location from the pass
+     *
+     * @param externaId            id of the pass you want to remove the location from.
+     * @param passLocationId    id of the location you want to remove.
+     */
     public static void deleteLocation(String externalId, long passLocationId) {
         checkNotNull(externalId, missingExternalId);
 

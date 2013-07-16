@@ -74,6 +74,12 @@ public class Project extends PassToolsClient {
         }
     }
 
+    /**
+     * Get the specified project.
+     *
+     * @param id    ID of the project you want to get.
+     * @return      the resulting project.
+     */
     public static Project getProject(long id) {
         try {
             String url = getBaseUrl() + "/" + id;
@@ -88,6 +94,12 @@ public class Project extends PassToolsClient {
         }
     }
 
+    /**
+     * Get the specified project, by external id.
+     *
+     * @param externalId    ID of the project you want to get.
+     * @return      the resulting project.
+     */
     public static Project getProject(String externalId) {
         try {
             checkNotNull(externalId, missingExternalIdError);
@@ -103,23 +115,65 @@ public class Project extends PassToolsClient {
         }
     }
 
+    /**
+     * Create a project with the specified, name, description and type.
+     *
+     * @param name          Name of newly created project.
+     * @param description   Description of the newly created project.
+     * @param projectType   Type of project you're creating.
+     * @return              The resulting project.
+     */
     public static Project createProject(String name, String description, String projectType) {
         return createProjectInternal(name, description, projectType, null, null);
     }
 
+    /**
+     * Create a project with the specified, name, description and type.
+     *
+     * @param externalId    ExternalID you want assigned to the newly created project.
+     * @param name          Name of newly created project.
+     * @param description   Description of the newly created project.
+     * @param projectType   Type of project you're creating.
+     * @return              The resulting project.
+     */
     public static Project createProject(String externalId, String name, String description, String projectType) {
         checkNotNull(externalId, missingExternalIdError);
         return createProjectInternal(name, description, projectType, externalId, null);
     }
 
+    /**
+     * Create a project with the specified, name, description and type.
+     *
+     * @param layoutId      Layout you want to base the new project on.
+     * @param name          Name of newly created project.
+     * @param description   Description of the newly created project.
+     * @param projectType   Type of project you're creating.
+     * @return              The resulting project.
+     */
     public static Project createProject(long layoutId, String name, String description, String projectType) {
         return createProjectInternal(name, description, projectType, null, layoutId);
     }
 
-    public static Project updateProject(Long projectId, String name, String description) {
+
+    /**
+     * update the specified project.
+     * @param projectId     ID of the project you want to update.
+     * @param name          New name of the project.
+     * @param description   New description of the project.
+     * @return              The resulting project.
+     */
+    public static Project updateProject(long projectId, String name, String description) {
         return updateProjectInternal(projectId, name, description);
     }
 
+    /**
+     * update the specified project.
+     *
+     * @param externalId    ID of the project you want to update.
+     * @param name          New name of the project.
+     * @param description   New description of the project.
+     * @return              The resulting project.
+     */
     public static Project updateProject(String externalId, String name, String description) {
         checkNotNull(externalId, missingExternalIdError);
         Project project = getProject(externalId);
@@ -129,6 +183,11 @@ public class Project extends PassToolsClient {
         return null;
     }
 
+    /**
+     * Delete the specified project.
+     *
+     * @param id    ID of the project you want to delete.
+     */
     public static void deleteProject(long id) {
         try {
             String url = getBaseUrl() + "/" + id;
@@ -140,6 +199,11 @@ public class Project extends PassToolsClient {
         }
     }
 
+    /**
+     * Delete the specified project.
+     *
+     * @param externalId    External ID of the project you want to delete.
+     */
     public static void deleteProject(String externalId) {
         try {
             checkNotNull(externalId, missingExternalIdError);
