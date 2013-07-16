@@ -1,4 +1,4 @@
-package com.passtools.client.exception;
+package com.urbanairship.digitalwallet.client.exception;
 
 
 public class InternalServerException extends PassToolsException {
