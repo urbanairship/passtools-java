@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class TagTest {
-    private final String API_KEY = "test";
-
     private final static int maxPages = 5;
     private final static int pageSize = 10;
 
@@ -28,7 +26,7 @@ public class TagTest {
 
     @BeforeClass
     public void init() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         randomTag = genRandomString();
         templateId = TestData.createTemplate(genRandomString(), true);
         if (templateId == 0) {

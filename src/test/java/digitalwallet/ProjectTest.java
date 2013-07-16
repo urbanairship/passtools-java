@@ -6,14 +6,14 @@ import com.urbanairship.digitalwallet.client.Project;
 import java.util.List;
 
 public class ProjectTest {
-    private final String API_KEY = "test";
+
 
     private final static int maxPages = 5;
     private final static int pageSize = 10;
 
     @org.testng.annotations.Test
     public void testGetProjectList() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         boolean done = false;
         int page = 0;
         while (!done) {
@@ -32,7 +32,7 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testCreateProject() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
         String projectType = "coupon";
@@ -57,7 +57,7 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testCreateProjectX() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String externalId = TestHelper.randomString("external-");
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
@@ -93,7 +93,7 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testUpdateProject() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
         String projectType = "coupon";
@@ -125,7 +125,7 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testUpdateProjectX() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String externalId = TestHelper.randomString("external-");
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();

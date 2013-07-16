@@ -9,15 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PassTest {
-
-    private final String API_KEY = "test";
-
     private final static int maxPages = 5;
     private final static int pageSize = 10;
 
     @org.testng.annotations.Test
     public void listPasses() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         boolean done = false;
         int page = 0;
 
@@ -33,7 +30,7 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testPassTags() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String tag = TestHelper.randomTag();
 
         /* step through some passes adding a tag to them */
@@ -71,7 +68,7 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testPassDeleteTag() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String tag = TestHelper.randomTag();
         List<Long> passIds = new ArrayList<Long>();
 
@@ -112,7 +109,7 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testRemoveAllPasses() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         String tag = TestHelper.randomTag();
         List<Long> passIds = new ArrayList<Long>();
 

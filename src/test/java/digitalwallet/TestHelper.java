@@ -1,6 +1,8 @@
 package digitalwallet;
 
 public class TestHelper {
+    private final static String API_KEY = "YOUR_KEY";
+
     public static String randomString(String head) {
         return head + (int)(Math.random() * 10000) + "-" + (int)(Math.random() * 10000) + "-" + (int)(Math.random() * 10000);
     }
@@ -52,5 +54,9 @@ public class TestHelper {
         }
 
         return l;
+    }
+
+    public static String getApiKey() {
+        return API_KEY;
     }
 }

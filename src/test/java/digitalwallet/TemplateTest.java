@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class TemplateTest {
-    private final String API_KEY = "test";
 
     /**
      * Create a standard template
      */
     @org.testng.annotations.Test
     public void createTemplate() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
 
         /* create a template */
         Map<String, Object> headers = randomHeaders();
@@ -47,7 +46,7 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateX() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
 
         /* create a template with an external id */
         Map<String, Object> headers = randomHeaders();
@@ -90,7 +89,7 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateXP() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
 
         String projectName = TestHelper.randomName();
         String projectDescription = TestHelper.randomDescription();
@@ -165,7 +164,7 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateP() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
 
         /* create a project */
         String projectName = TestHelper.randomName();
@@ -216,7 +215,7 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void duplicateTemplate() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -261,7 +260,7 @@ public class TemplateTest {
     @org.testng.annotations.Test
     public void duplicateTemplateX() {
         /* create a template with an external id */
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -316,7 +315,7 @@ public class TemplateTest {
     @org.testng.annotations.Test
     public void externalId() {
 
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -379,7 +378,7 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void updateTemplate() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -413,7 +412,7 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void updateTemplateX() {
-        PassTools.apiKey = API_KEY;
+        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
