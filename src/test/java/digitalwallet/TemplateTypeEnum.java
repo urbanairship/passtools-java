@@ -21,10 +21,24 @@ public enum TemplateTypeEnum {
     private final String displayName;
     private final int vendorId;
 
-    private static List<TemplateTypeEnum> appleTemplateTypes = null;
-    private static List<TemplateTypeEnum> googleTemplateTypes = null;
+    private static List<TemplateTypeEnum> appleTemplateTypes;
+    private static List<TemplateTypeEnum> googleTemplateTypes;
 
-    private static final Object oSync = new Object();
+    static {
+        appleTemplateTypes = new ArrayList<TemplateTypeEnum>();
+        for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
+            if (current.getVendorId() == 1) {
+                appleTemplateTypes.add(current);
+            }
+        }
+
+        googleTemplateTypes = new ArrayList<TemplateTypeEnum>();
+        for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
+            if (current.getVendorId() == 2) {
+                googleTemplateTypes.add(current);
+            }
+        }
+    }
 
     private TemplateTypeEnum(Long code, String jsonName, String displayName, int vendorId) {
         this.vendorId = vendorId;
@@ -136,34 +150,11 @@ public enum TemplateTypeEnum {
     }
 
     private static List<TemplateTypeEnum> getGoogleTemplateTypes() {
-        synchronized (oSync) {
-            if (googleTemplateTypes == null) {
-                googleTemplateTypes = new ArrayList<TemplateTypeEnum>();
+        return googleTemplateTypes;
 
-                for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
-                    if (current.getVendorId() == 2) {
-                        googleTemplateTypes.add(current);
-                    }
-                }
-            }
-
-            return googleTemplateTypes;
-        }
     }
 
     private static List<TemplateTypeEnum> getAppleTemplateTypes() {
-        synchronized (oSync) {
-            if (appleTemplateTypes == null) {
-                appleTemplateTypes = new ArrayList<TemplateTypeEnum>();
-
-                for (TemplateTypeEnum current : TemplateTypeEnum.values()) {
-                    if (current.getVendorId() == 1) {
-                        appleTemplateTypes.add(current);
-                    }
-                }
-            }
-
-            return appleTemplateTypes;
-        }
+        return appleTemplateTypes;
     }
 }
