@@ -6,6 +6,7 @@ import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Tag;
 import com.urbanairship.digitalwallet.client.Template;
 import org.apache.commons.lang.RandomStringUtils;
+import org.json.simple.JSONObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,23 +24,18 @@ public class TagTest {
     private Long templateId = null;
     private boolean initDone = false;
     private String randomTag;
-    private String randomExternalId;
     private Pass pass = null;
-
-    private String passExternalId;
 
     @BeforeClass
     public void init() {
         PassTools.apiKey = API_KEY;
         randomTag = genRandomString();
-        randomExternalId = genRandomString();
-        passExternalId = genRandomString();
-        templateId = TestData.createTemplate(randomExternalId, true);
+        templateId = TestData.createTemplate(genRandomString(), true);
         if (templateId == 0) {
             return;
         }
         Map fields = TestData.getCreatePassFields();
-        pass = Pass.create(templateId, passExternalId, fields);
+        pass = Pass.create(templateId, genRandomString(), fields);
         if (pass == null || pass.getPassId() == null) {
             return;
         }
@@ -99,7 +95,7 @@ public class TagTest {
     @Test(priority = 2)
     public void getPassesTest() {
         Preconditions.checkArgument(initDone);
-        List<Pass> passes = Tag.getPasses(randomTag);
+        List<Pass> passes = Tag.getPasses(randomTag, 20, 1);
         if (passes == null || passes.size() == 0) {
             assert false;
         }
@@ -139,8 +135,11 @@ public class TagTest {
     @Test(priority = 99)
     public void deleteTagTest() {
         Preconditions.checkArgument(initDone);
-        boolean done = Tag.deleteTag(randomTag);
-        assert done;
+        JSONObject o = Tag.deleteTag(randomTag);
+        Object s =  o.get("success");
+        assert s != null;
+        assert s instanceof String;
+        assert "success".equalsIgnoreCase((String)s);
     }
 
 
@@ -156,7 +155,7 @@ public class TagTest {
         List<String> tags = Pass.addTag(pass1.getPassId(), lRandomTag);
 
         Tag.removeFromPasses(lRandomTag);
-        List<Pass> passes = Tag.getPasses(lRandomTag);
+        List<Pass> passes = Tag.getPasses(lRandomTag, 20, 1);
         if (passes == null || passes.size() == 0) {
             assert true;
         } else {
@@ -167,8 +166,11 @@ public class TagTest {
     @Test(priority = 97)
     public void removeFromPassTest() {
         Preconditions.checkArgument(initDone);
-        boolean removed = Tag.removeFromPass(randomTag, pass.getPassId());
-        assert removed;
+        JSONObject o = Tag.removeFromPass(randomTag, pass.getPassId());
+        Object s =  o.get("success");
+        assert s != null;
+        assert s instanceof String;
+        assert "success".equalsIgnoreCase((String)s);
     }
 
 
@@ -183,8 +185,11 @@ public class TagTest {
         }
         String lRandomTag = genRandomString();
         List<String> tags = Pass.addTag(pass1.getPassId(), lRandomTag);
-        boolean removed = Tag.removeFromPass(lRandomTag, lExternalId);
-        assert removed;
+        JSONObject o = Tag.removeFromPass(lRandomTag, lExternalId);
+        Object s =  o.get("success");
+        assert s != null;
+        assert s instanceof String;
+        assert "success".equalsIgnoreCase((String)s);
     }
 
 
