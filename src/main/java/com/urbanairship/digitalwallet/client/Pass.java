@@ -6,6 +6,7 @@ import com.urbanairship.digitalwallet.client.data.LocationInfo;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.swing.text.MaskFormatter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -50,6 +51,7 @@ public class Pass extends PassToolsClient {
      ***********/
 
     private Map fields; // (field key, JSONObject )
+    private Map headers; //headers for 1.1+
     private Long passId;
     private Long templateId;
     private String url;
@@ -608,6 +610,10 @@ public class Pass extends PassToolsClient {
         return fields;
     }
 
+    public Map getHeaders() {
+        return headers;
+    }
+
     public Long getPassId() {
         return passId;
     }
@@ -634,6 +640,7 @@ public class Pass extends PassToolsClient {
         externalId = null;
         url = null;
         fields = null;
+        headers = null;
     }
 
     @SuppressWarnings("unchecked")
@@ -649,8 +656,11 @@ public class Pass extends PassToolsClient {
             }
             url = (String) response.get("url");
 
-            if (response.get("passFields") != null) {
-                fields = (Map<String, String>) (response.get("passFields"));
+            if (response.get("fields") != null) {
+                fields = (Map<String, String>) (response.get("fields"));
+            }
+            if (response.get("headers") != null) {
+                headers = (Map<String, String>) (response.get("headers"));
             }
         }
     }
