@@ -88,7 +88,7 @@ public class TagTest {
                 page++;
 
                 for (Tag current : tags) {
-                    Tag.getPasses(current.getTag());
+                    Tag.getPasses(current.getTag(), 20, 1);
                 }
             } else {
                 done = true;

@@ -57,13 +57,11 @@ public class Pass extends PassToolsClient {
     private String url;
     private String externalId;
 
-    private static final String missingPassIdError = "please pass a valid pass Id in!";
     private static final String missingPassFieldsError = "please pass a map of fields in!";
     private static final String missingPassError = "please input a valid Pass!";
     private static final String missingExternalId = "please pass a valid external id in!";
-    private static final String missingLocationId = "please pass a valid location id in!";
     private static final String missingTagsError = "please pass in a valid list of tags";
-    private static final String missingTemplateIdError = "please pass a valid template Id in!";
+    private static final String missingExternalTemplateIdError = "please pass a valid external template id in!";
 
     /***********
      * constructors
@@ -111,8 +109,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static List<Tag> getTags(Long passId) {
-        checkNotNull(passId, missingPassIdError);
+    public static List<Tag> getTags(long passId) {
         return getTagsInternal(getBaseUrl(passId));
     }
 
@@ -121,8 +118,7 @@ public class Pass extends PassToolsClient {
         return getTagsInternal(getBaseUrl(externalId));
     }
 
-    public static List<String> addTags(Long passId, List<String> tags) {
-        checkNotNull(passId, missingPassIdError);
+    public static List<String> addTags(long passId, List<String> tags) {
         checkNotNull(tags, missingTagsError);
         return addTagsInternal(getBaseUrl(passId), tags);
     }
@@ -133,8 +129,7 @@ public class Pass extends PassToolsClient {
         return addTagsInternal(getBaseUrl(externalId), tags);
     }
 
-    public static List<String> addTag(Long passId, String tag) {
-        checkNotNull(passId, missingPassIdError);
+    public static List<String> addTag(long passId, String tag) {
         checkNotNull(tag, missingTagsError);
         return addTagInternal(getBaseUrl(passId), tag);
     }
@@ -147,21 +142,19 @@ public class Pass extends PassToolsClient {
 
     /* Creates a pass with the Map fieldsModel set. The Map fieldsModel can be retrieved from the getTemplateModel() function given a templateId provided by the UI Template Builder */
 
-    public static Pass create(Long templateId, Map passFields) {
-        checkNotNull(templateId, missingTemplateIdError);
+    public static Pass create(long templateId, Map passFields) {
         checkNotNull(passFields, missingPassFieldsError);
         return createInternal(getBaseUrl(templateId), passFields);
     }
 
-    public static Pass create(Long templateId, String passExternalId, Map passFields) {
-        checkNotNull(templateId, missingTemplateIdError);
+    public static Pass create(long templateId, String passExternalId, Map passFields) {
         checkNotNull(passFields, missingPassFieldsError);
         checkNotNull(passExternalId, missingExternalId);
         return createInternal(getBaseUrl(templateId) + "/id/" + passExternalId, passFields);
     }
 
     public static Pass create(String templateExternalId, String passExternalId, Map passFields) {
-        checkNotNull(templateExternalId, missingTemplateIdError);
+        checkNotNull(templateExternalId, missingExternalTemplateIdError);
         checkNotNull(passFields, missingPassFieldsError);
         checkNotNull(passExternalId, missingExternalId);
         return createInternal(getBaseUrl(templateExternalId) + "/id/" + passExternalId, passFields);
@@ -170,8 +163,7 @@ public class Pass extends PassToolsClient {
 
 
     @SuppressWarnings("unchecked")
-    public static Pass update(Long passId, Map fields) {
-        checkNotNull(passId, missingPassIdError);
+    public static Pass update(long passId, Map fields) {
         checkNotNull(fields, missingPassFieldsError);
 
         try {
@@ -231,9 +223,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static Pass get(Long passId) {
-        checkNotNull(passId, missingPassIdError);
-
+    public static Pass get(long passId) {
         try {
             String url = getBaseUrl(passId);
             PassToolsResponse response = get(url);
@@ -261,8 +251,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static void downloadPass(Long passId, File to) {
-        checkNotNull(passId, missingPassIdError);
+    public static void downloadPass(long passId, File to) {
         downloadPassInternal(getBaseUrl(passId) + "/download", to);
     }
 
@@ -271,9 +260,7 @@ public class Pass extends PassToolsClient {
         downloadPassInternal(getBaseUrl(externalId) + "/download", to);
     }
 
-    public static void delete(Long passId) {
-        checkNotNull(passId, missingPassIdError);
-
+    public static void delete(long passId) {
         try {
             String url = getBaseUrl(passId);
             PassToolsResponse response = delete(url);
@@ -297,9 +284,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static JSONObject viewPassbookJSONPass(Long passId) {
-        checkNotNull(passId, missingPassIdError);
-
+    public static JSONObject viewPassbookJSONPass(long passId) {
         try {
             String url = getBaseUrl(passId) + "/viewJSONPass";
             PassToolsResponse response = get(url);
@@ -325,9 +310,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static JSONObject push(Long passId) {
-        checkNotNull(passId, missingPassIdError);
-
+    public static JSONObject push(long passId) {
         try {
             String url = getBaseUrl(passId) + "/push";
             PassToolsResponse response = put(url, Collections.emptyMap());
@@ -353,8 +336,7 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static JSONArray addLocations(Long passId, List<LocationInfo> locationInfo) {
-        checkNotNull(passId, missingPassIdError);
+    public static JSONArray addLocations(long passId, List<LocationInfo> locationInfo) {
         return addLocationsInternal(getBaseUrl(passId) + "/locations", locationInfo);
     }
 
@@ -364,12 +346,9 @@ public class Pass extends PassToolsClient {
     }
 
     /* deletes a location from the pass */
-    public static void deleteLocation(Long passId, Long passLocationId) {
-        checkNotNull(passId, missingPassIdError);
-        checkNotNull(passLocationId, missingLocationId);
-
+    public static void deleteLocation(long passId, long passLocationId) {
         try {
-            String url = getBaseUrl(passId) + "/location/" + passLocationId.toString();
+            String url = getBaseUrl(passId) + "/location/" + String.valueOf(passLocationId);
             delete(url);
         } catch (RuntimeException rte) {
             throw rte;
@@ -378,12 +357,11 @@ public class Pass extends PassToolsClient {
         }
     }
 
-    public static void deleteLocation(String externalId, Long passLocationId) {
+    public static void deleteLocation(String externalId, long passLocationId) {
         checkNotNull(externalId, missingExternalId);
-        checkNotNull(passLocationId, missingLocationId);
 
         try {
-            String url = getBaseUrl(externalId) + "/location/" + passLocationId.toString();
+            String url = getBaseUrl(externalId) + "/location/" + String.valueOf(passLocationId);
             delete(url);
         } catch (RuntimeException rte) {
             throw rte;
@@ -459,7 +437,7 @@ public class Pass extends PassToolsClient {
         return PassTools.API_BASE + "/pass";
     }
 
-    private static String getBaseUrl(Long passId) {
+    private static String getBaseUrl(long passId) {
         return PassTools.API_BASE + "/pass/" + passId;
     }
 

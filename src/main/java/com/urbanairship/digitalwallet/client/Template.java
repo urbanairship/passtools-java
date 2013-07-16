@@ -30,7 +30,6 @@ public class Template extends PassToolsClient {
     private boolean disabled;
     private String externalId;
 
-    private static final String missingTemplateIdError = "please pass a valid template Id in!";
     private static final String missingExternalIdError = "please pass a valid external Id in!";
 
     /*
@@ -94,7 +93,7 @@ public class Template extends PassToolsClient {
      * @throws InvalidParameterException if missing a required parameter
      *                                   RuntimeException with other errors.
      */
-    public static Long createTemplate(Long projectId, String name, String description, String templateType, Map<String, Object> headers, Map<String, Object> fields) {
+    public static Long createTemplate(long projectId, String name, String description, String templateType, Map<String, Object> headers, Map<String, Object> fields) {
         return createTemplateInternal(name, description, templateType, headers, fields, projectId, null);
     }
 
@@ -130,7 +129,7 @@ public class Template extends PassToolsClient {
      * @throws InvalidParameterException if missing a required parameter
      *                                   RuntimeException with other errors.
      */
-    public static Long createTemplate(Long projectId, String externalId, String name, String description, String templateType, Map<String, Object> headers, Map<String, Object> fields) {
+    public static Long createTemplate(long projectId, String externalId, String name, String description, String templateType, Map<String, Object> headers, Map<String, Object> fields) {
         return createTemplateInternal(name, description, templateType, headers, fields, projectId, externalId);
     }
 
@@ -140,11 +139,9 @@ public class Template extends PassToolsClient {
      * @param templateId ID of the template you want.
      * @return A Template Object with the values from templateId
      */
-    public static Template getTemplate(Long templateId) {
+    public static Template getTemplate(long templateId) {
         try {
-            checkNotNull(templateId, missingTemplateIdError);
-
-            String url = PassTools.API_BASE + "/template/" + templateId.toString();
+            String url = PassTools.API_BASE + "/template/" + String.valueOf(templateId);
             PassToolsResponse response = get(url);
 
             return new Template(response.getBodyAsJSONObject());
@@ -181,11 +178,9 @@ public class Template extends PassToolsClient {
      *
      * @param templateId id of the template you want to delete.
      */
-    public static void delete(Long templateId) {
+    public static void delete(long templateId) {
         try {
-            checkNotNull(templateId, missingTemplateIdError);
-
-            String url = PassTools.API_BASE + "/template/" + templateId.toString();
+            String url = PassTools.API_BASE + "/template/" + String.valueOf(templateId);
             PassToolsResponse response = delete(url);
         } catch (RuntimeException rte) {
             throw rte;
@@ -219,11 +214,9 @@ public class Template extends PassToolsClient {
      * @param templateId Template ID of the template you want to duplicate
      * @return The template ID of the newly created template.
      */
-    public static Long duplicate(Long templateId) {
+    public static Long duplicate(long templateId) {
         try {
             Long id = null;
-            checkNotNull(templateId, missingTemplateIdError);
-
 
             String url = PassTools.API_BASE + "/template/duplicate/" + templateId;
             PassToolsResponse response = post(url, emptyJSON());
@@ -321,8 +314,7 @@ public class Template extends PassToolsClient {
      * @param headers     Headers for the updated template.
      * @param fields      Fields for the updated template.
      */
-    public static void updateTemplate(Long templateId, String name, String description, Map<String, Object> headers, Map<String, Object> fields) {
-        checkNotNull(templateId, missingTemplateIdError);
+    public static void updateTemplate(long templateId, String name, String description, Map<String, Object> headers, Map<String, Object> fields) {
         updateTemplateInternal(name, description, headers, fields, templateId, null);
     }
 
