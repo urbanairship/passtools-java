@@ -11,15 +11,14 @@ package com.urbanairship.digitalwallet.client;
     DELETE      /{tag}/pass/id/{externalId}     Remove a pass from a tag by it's external id.
  */
 
-import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class Tag extends PassToolsClient {
     private Long id;
@@ -52,6 +51,13 @@ public class Tag extends PassToolsClient {
         return passIds;
     }
 
+    /**
+     * Get the list of your tags.
+     *
+     * @param pageSize  Number of tags you want returned per call
+     * @param page      Page you want returned, starting with 1.
+     * @return          A list of tags that you own.
+     */
     public static List<Tag> getList(int pageSize, int page) {
         try {
             List<Tag> tags = new ArrayList<Tag>();
@@ -78,13 +84,22 @@ public class Tag extends PassToolsClient {
         }
     }
 
-    public static List<Pass> getPasses(String tag) {
+    /**
+     * Get the list of passes on a tag.
+     *
+     * @param tag   Tag you want the list of passes for.
+     * @param pageSize  Number of passes you want returned per page
+     * @param page      The page you want returned, starting with 1.
+     * @return      a list of passes.
+     */
+    public static List<Pass> getPasses(String tag, int pageSize, int page) {
         checkNotNull(tag, missingTagError);
         try {
             List<Pass> passes = new ArrayList<Pass>();
 
             StringBuilder builder = new StringBuilder(getBaseUrl());
-            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
+            builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes")
+                    .append("?pageSize=").append(pageSize).append("&page=").append(page);
             PassToolsResponse response = get(builder.toString());
 
             JSONObject jsonResponse = response.getBodyAsJSONObject();
@@ -105,6 +120,14 @@ public class Tag extends PassToolsClient {
         }
     }
 
+    /**
+     * Update all of the passes on a tag.
+     *
+     * @param tag       Tag you want to update the passes for.
+     * @param fields    Fields you want to update.
+     * @return          A ticket id for this update operation.
+     */
+    @SuppressWarnings("unchecked")
     public static Long updatePasses(String tag, Map fields) {
         checkNotNull(tag, missingTagError);
         try {
@@ -115,8 +138,7 @@ public class Tag extends PassToolsClient {
             PassToolsResponse response = put(builder.toString(), formParams);
 
             JSONObject jsonObjResponse = response.getBodyAsJSONObject();
-            Long ticketId = (Long) jsonObjResponse.get("ticketId");
-            return ticketId;
+            return (Long) jsonObjResponse.get("ticketId");
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -125,18 +147,21 @@ public class Tag extends PassToolsClient {
 
     }
 
-    public static boolean deleteTag(String tag) {
+    /**
+     * Delete a tag and remove it from all passes.
+     *
+     * @param tag   Tag you want to delete
+     * @return      A JSON Object with
+     *                  status: "success" if successful.
+     *                  count: the number of passes removed from the tag.
+     *                  tagId: the id of the deleted tag.
+     */
+    public static JSONObject deleteTag(String tag) {
         checkNotNull(tag, missingTagError);
         try {
             String url = getBaseUrl() + "/" + URLEncoder.encode(tag, "UTF-8");
             PassToolsResponse response = delete(url);
-            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
-            String status = (String) jsonObjResponse.get("status");
-            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
-                return true;
-            } else {
-                return false;
-            }
+            return response.getBodyAsJSONObject();
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -145,19 +170,22 @@ public class Tag extends PassToolsClient {
 
     }
 
-    public static boolean removeFromPasses(String tag) {
+    /**
+     * Remove all of the passes from a tag.
+     *
+     * @param tag   the tag you want to remove the passes from.
+     * @return      A JSON Object with
+     *                  status: "success" if successful.
+     *                  count: the number of passes removed from the tag.
+     *                  tagId: the id of the deleted tag.
+     */
+    public static JSONObject removeFromPasses(String tag) {
         checkNotNull(tag, missingTagError);
         try {
             StringBuilder builder = new StringBuilder(getBaseUrl());
             builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/passes");
             PassToolsResponse response = delete(builder.toString());
-            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
-            String status = (String) jsonObjResponse.get("status");
-            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
-                return true;
-            } else {
-                return false;
-            }
+            return response.getBodyAsJSONObject();
 
         } catch (RuntimeException e) {
             throw e;
@@ -166,19 +194,23 @@ public class Tag extends PassToolsClient {
         }
     }
 
-    public static boolean removeFromPass(String tag, Long passId) {
+    /**
+     * Remove the specified tag from the specified pass.
+     *
+     * @param tag       Tag you want to remove from the pass.
+     * @param passId    Pass you want to un-tag.
+     * @return          A JSONObject with
+     *                      status: "success" if successful.
+     *                      passId: The id of the pass that tag was removed from.
+     *                      tagId: the id of the tag that the pass was removed from.
+     */
+    public static JSONObject removeFromPass(String tag, long passId) {
         checkNotNull(tag, missingTagError);
         try {
             StringBuilder builder = new StringBuilder(getBaseUrl());
             builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/pass/").append(passId);
             PassToolsResponse response = delete(builder.toString());
-            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
-            String status = (String) jsonObjResponse.get("status");
-            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
-                return true;
-            } else {
-                return false;
-            }
+            return response.getBodyAsJSONObject();
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -186,25 +218,32 @@ public class Tag extends PassToolsClient {
         }
     }
 
-    public static boolean removeFromPass(String tag, String externalId) {
+    /**
+     * Remove the specified tag from the specified pass.
+     * @param tag           Tag you want to remove from the pass.
+     * @param externalId    Pass you want to un-tag.
+     * @return              A JSONObject with
+     *                          status: "success" if successful.
+     *                          passId: The id of the pass that tag was removed from.
+     *                          tagId: the id of the tag that the pass was removed from.
+     */
+    public static JSONObject removeFromPass(String tag, String externalId) {
         checkNotNull(tag, missingTagError);
         try {
             StringBuilder builder = new StringBuilder(getBaseUrl());
             builder.append("/").append(URLEncoder.encode(tag, "UTF-8")).append("/pass/id/").append(externalId);
             PassToolsResponse response = delete(builder.toString());
-            JSONObject jsonObjResponse = response.getBodyAsJSONObject();
-            String status = (String) jsonObjResponse.get("status");
-            if ((!StringUtils.isBlank(status)) && status.equals("success")) {
-                return true;
-            } else {
-                return false;
-            }
+            return response.getBodyAsJSONObject();
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException();
         }
     }
+
+    /*********
+     * Private methods
+     *********/
 
     private void reset() {
         id = null;

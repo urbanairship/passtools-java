@@ -30,8 +30,6 @@ public class Project extends PassToolsClient {
     private String projectType;
     private List<Template> templates;
 
-    private static final String missingProjectIdError = "please pass a valid project Id in!";
-    private static final String missingLayoutIdError = "please pass a valid layout Id in!";
     private static final String missingExternalIdError = "please pass a valid external Id in!";
     private static final String missingNameError = "please pass a valid name in!";
     private static final String missingDescriptionError = "please pass a valid description in!";
@@ -76,9 +74,8 @@ public class Project extends PassToolsClient {
         }
     }
 
-    public static Project getProject(Long id) {
+    public static Project getProject(long id) {
         try {
-            checkNotNull(id, missingProjectIdError);
             String url = getBaseUrl() + "/" + id;
             PassToolsResponse response = get(url);
 
@@ -115,8 +112,7 @@ public class Project extends PassToolsClient {
         return createProjectInternal(name, description, projectType, externalId, null);
     }
 
-    public static Project createProject(Long layoutId, String name, String description, String projectType) {
-        checkNotNull(layoutId, missingLayoutIdError);
+    public static Project createProject(long layoutId, String name, String description, String projectType) {
         return createProjectInternal(name, description, projectType, null, layoutId);
     }
 
@@ -133,9 +129,8 @@ public class Project extends PassToolsClient {
         return null;
     }
 
-    public static void deleteProject(Long id) {
+    public static void deleteProject(long id) {
         try {
-            checkNotNull(id, missingProjectIdError);
             String url = getBaseUrl() + "/" + id;
             PassToolsResponse response = delete(url);
         } catch (RuntimeException rte) {
@@ -235,10 +230,8 @@ public class Project extends PassToolsClient {
 
     }
 
-    private static Project updateProjectInternal(Long projectId, String name, String description) {
+    private static Project updateProjectInternal(long projectId, String name, String description) {
         try {
-            Long id = null;
-            checkNotNull(projectId, missingProjectIdError);
             checkNotNull(name, missingNameError);
             checkNotNull(description, missingDescriptionError);
 
