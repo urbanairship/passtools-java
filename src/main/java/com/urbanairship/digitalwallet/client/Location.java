@@ -1,9 +1,8 @@
-package com.passtools.client;
+package com.urbanairship.digitalwallet.client;
 
 
-import com.passtools.client.data.LocationInfo;
-import com.passtools.client.exception.InternalServerException;
-import com.passtools.client.exception.InvalidParameterException;
+import com.urbanairship.digitalwallet.client.data.LocationInfo;
+import com.urbanairship.digitalwallet.client.exception.InternalServerException;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;

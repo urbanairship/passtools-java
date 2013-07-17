@@ -1,7 +1,7 @@
-package com.passtools.client.data;
+package com.urbanairship.digitalwallet.client.data;
 
 
-import com.passtools.client.exception.InvalidParameterException;
+import com.urbanairship.digitalwallet.client.exception.InvalidParameterException;
 import org.json.simple.JSONObject;
 
 public class LocationInfo {
