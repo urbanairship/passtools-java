@@ -1,12 +1,15 @@
 package digitalwallet.mock;
 
 
+import com.urbanairship.digitalwallet.client.PassTools;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.mockito.Mockito.when;
 
@@ -56,6 +59,16 @@ public class HttpArgumentCaptor<T> {
 
     protected void verify(HttpRequestBase current, String address) {
         assert current.getURI().getPath().equals(address);
-        assert current.getURI().getHost().equals(defaultHostName);
+        assert current.getURI().getHost().equals(hostName());
+    }
+
+    private String hostName() {
+        try {
+            URL url = new URL(PassTools.API_BASE);
+            return url.getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return defaultHostName;
     }
 }
