@@ -4,20 +4,20 @@ import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Template;
 import digitalwallet.mock.MockHttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
-public class MockTemplateTest {
-    private final static String defaultHostName = "api.passtools.com";
+public class MockTemplateTest extends BaseMockTest {
 
     @Mock
     private HttpClient httpClient;
@@ -154,29 +154,5 @@ public class MockTemplateTest {
         }
     }
 
-    private void verify(HttpRequestBase current, String address) {
-        assert current.getURI().getPath().equals(address);
-        assert current.getURI().getHost().equals(defaultHostName);
-    }
 
-    private Map<String, Object> randomHeaders() {
-        return new HashMap<String, Object>();
-    }
-
-    private Map<String, Object> randomFields() {
-        return new HashMap<String, Object>();
-    }
-
-    private String randomType() {
-        TemplateTypeEnum t = TemplateTypeEnum.getRandomAppleTemplateType();
-        return t.getJsonName();
-    }
-
-    private long randomId() {
-        return (long)(Math.random() * 1000000);
-    }
-
-    private String randomExternalId() {
-        return TestHelper.randomString("External-");
-    }
 }
