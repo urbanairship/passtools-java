@@ -72,7 +72,7 @@ public class MockHttpResponse implements HttpResponse {
         // do we want to implement this?
         if (httpEntity != null) {
             try {
-                entity = new MockEntity(getStringFromInputStream(httpEntity.getContent()));
+                entity = new MockEntity(httpEntity.getContent());
             } catch (IOException e) {
                 e.printStackTrace();
                 entity = new MockEntity();
@@ -192,34 +192,5 @@ public class MockHttpResponse implements HttpResponse {
             throw new IllegalArgumentException("HTTP parameters may not be null");
         }
         this.params = params;
-    }
-
-    // flagrantly stolen from the internet ;)
-    private String getStringFromInputStream(final InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
     }
 }

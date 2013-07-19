@@ -5,10 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class MockEntity implements HttpEntity {
     private static final String defaultBody = "{\"Foo\":\"Bar\"}";
@@ -23,6 +20,31 @@ public class MockEntity implements HttpEntity {
 
     public MockEntity(final String body) {
         this.body = body;
+    }
+
+    public MockEntity(final InputStream is) {
+        BufferedReader br = null;
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            this.body = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
