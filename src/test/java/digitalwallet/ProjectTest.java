@@ -1,19 +1,17 @@
 package digitalwallet;
 
-import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Project;
 
 import java.util.List;
 
-public class ProjectTest {
-
-
-    private final static int maxPages = 5;
-    private final static int pageSize = 10;
+public class ProjectTest extends BaseIntegrationTest {
 
     @org.testng.annotations.Test
     public void testGetProjectList() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         boolean done = false;
         int page = 0;
         while (!done) {
@@ -32,7 +30,10 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testCreateProject() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
         String projectType = "coupon";
@@ -57,7 +58,10 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testCreateProjectX() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String externalId = TestHelper.randomString("external-");
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
@@ -93,7 +97,10 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testUpdateProject() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();
         String projectType = "coupon";
@@ -125,7 +132,10 @@ public class ProjectTest {
 
     @org.testng.annotations.Test
     public void testUpdateProjectX() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String externalId = TestHelper.randomString("external-");
         String name = TestHelper.randomName();
         String description = TestHelper.randomDescription();

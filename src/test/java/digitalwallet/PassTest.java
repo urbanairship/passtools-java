@@ -2,19 +2,20 @@ package digitalwallet;
 
 
 import com.urbanairship.digitalwallet.client.Pass;
-import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassTest {
-    private final static int maxPages = 5;
-    private final static int pageSize = 10;
+@org.testng.annotations.Test
+public class PassTest extends BaseIntegrationTest {
 
     @org.testng.annotations.Test
     public void listPasses() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         boolean done = false;
         int page = 0;
 
@@ -30,7 +31,10 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testPassTags() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String tag = TestHelper.randomTag();
 
         /* step through some passes adding a tag to them */
@@ -68,7 +72,10 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testPassDeleteTag() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String tag = TestHelper.randomTag();
         List<Long> passIds = new ArrayList<Long>();
 
@@ -109,7 +116,10 @@ public class PassTest {
 
     @org.testng.annotations.Test
     public void testRemoveAllPasses() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         String tag = TestHelper.randomTag();
         List<Long> passIds = new ArrayList<Long>();
 
