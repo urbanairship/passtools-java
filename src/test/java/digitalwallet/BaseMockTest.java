@@ -1,6 +1,7 @@
 package digitalwallet;
 
 
+import com.urbanairship.digitalwallet.client.PassTools;
 import digitalwallet.mock.HttpArgumentCaptor;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -8,6 +9,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.BeforeClass;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,6 +20,14 @@ public abstract class BaseMockTest {
 
     @Mock
     protected HttpClient httpClient;
+
+    @BeforeClass
+    protected void setup() {
+        MockitoAnnotations.initMocks(this);
+        PassTools.apiKey = "MOCK_KEY";
+        PassTools.client = httpClient;
+    }
+
 
     protected HttpArgumentCaptor<HttpGet> getGetCaptor() throws IOException {
         return new HttpArgumentCaptor<HttpGet>(HttpGet.class, httpClient);

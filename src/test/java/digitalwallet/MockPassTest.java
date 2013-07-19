@@ -9,16 +9,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeClass;
 
 import java.io.IOException;
 
 public class MockPassTest extends BaseMockTest {
 
-    @BeforeSuite
-    private void setup() {
+    @BeforeClass
+    protected void setup() {
         MockitoAnnotations.initMocks(this);
-        PassTools.apiKey = TestHelper.getApiKey();
+        PassTools.apiKey = "MOCK_KEY";
         PassTools.client = httpClient;
     }
 

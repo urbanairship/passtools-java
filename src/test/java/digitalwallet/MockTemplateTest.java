@@ -1,25 +1,15 @@
 package digitalwallet;
 
-import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Template;
 import digitalwallet.mock.HttpArgumentCaptor;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
 
 public class MockTemplateTest extends BaseMockTest {
-
-    @BeforeSuite
-    private void setup() {
-        MockitoAnnotations.initMocks(this);
-        PassTools.apiKey = TestHelper.getApiKey();
-        PassTools.client = httpClient;
-    }
 
     @org.testng.annotations.Test
     public void testGetTemplate() throws Exception {
