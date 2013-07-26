@@ -1,12 +1,10 @@
 package com.urbanairship.digitalwallet.client;
 
-
 import com.google.gson.Gson;
 import com.urbanairship.digitalwallet.client.data.LocationInfo;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.swing.text.MaskFormatter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -586,7 +584,7 @@ public class Pass extends PassToolsClient {
     /**
      * deletes a location from the pass
      *
-     * @param externaId            id of the pass you want to remove the location from.
+     * @param externalId            id of the pass you want to remove the location from.
      * @param passLocationId    id of the location you want to remove.
      */
     public static void deleteLocation(String externalId, long passLocationId) {

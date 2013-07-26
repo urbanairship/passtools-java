@@ -76,6 +76,10 @@ public abstract class PassToolsClient {
     }
 
     protected static HttpClient getHttpClient() throws Exception {
+        if (PassTools.client != null) {
+            return PassTools.client;
+        }
+
         HttpClient base = new DefaultHttpClient();
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
@@ -113,7 +117,7 @@ public abstract class PassToolsClient {
     }
 
 
-    protected static PassToolsResponse get(String url) throws Exception {
+    public static PassToolsResponse get(String url) throws Exception {
 
         apiKeyCheck();
 

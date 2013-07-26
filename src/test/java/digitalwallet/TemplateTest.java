@@ -1,7 +1,6 @@
 package digitalwallet;
 
 
-import com.urbanairship.digitalwallet.client.PassTools;
 import com.urbanairship.digitalwallet.client.Project;
 import com.urbanairship.digitalwallet.client.Template;
 
@@ -9,14 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TemplateTest {
-
+public class TemplateTest extends BaseIntegrationTest {
     /**
      * Create a standard template
      */
     @org.testng.annotations.Test
     public void createTemplate() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
 
         /* create a template */
         Map<String, Object> headers = randomHeaders();
@@ -46,7 +46,9 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateX() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
 
         /* create a template with an external id */
         Map<String, Object> headers = randomHeaders();
@@ -89,7 +91,9 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateXP() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
 
         String projectName = TestHelper.randomName();
         String projectDescription = TestHelper.randomDescription();
@@ -164,7 +168,9 @@ public class TemplateTest {
      */
     @org.testng.annotations.Test
     public void createTemplateP() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
 
         /* create a project */
         String projectName = TestHelper.randomName();
@@ -215,7 +221,10 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void duplicateTemplate() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -259,8 +268,11 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void duplicateTemplateX() {
+        if (!integrationTesting) {
+            return;
+        }
+
         /* create a template with an external id */
-        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -314,8 +326,10 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void externalId() {
+        if (!integrationTesting) {
+            return;
+        }
 
-        PassTools.apiKey = TestHelper.getApiKey();
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -378,7 +392,10 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void updateTemplate() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -412,7 +429,10 @@ public class TemplateTest {
 
     @org.testng.annotations.Test
     public void updateTemplateX() {
-        PassTools.apiKey = TestHelper.getApiKey();
+        if (!integrationTesting) {
+            return;
+        }
+
         Map<String, Object> headers = randomHeaders();
         Map<String, Object> fields = randomFields();
         String name = TestHelper.randomName();
@@ -461,13 +481,11 @@ public class TemplateTest {
     }
 
     private Map<String, Object> randomHeaders() {
-        Map<String, Object> headers = new HashMap<String, Object>();
-        return headers;
+        return new HashMap<String, Object>();
     }
 
     private Map<String, Object> randomFields() {
-        Map<String, Object> fields = new HashMap<String, Object>();
-        return fields;
+        return new HashMap<String, Object>();
     }
 
     private String randomType() {
